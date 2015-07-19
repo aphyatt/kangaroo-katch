@@ -92,12 +92,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AD58E8C31B59BA56004965D8 /* KKImages2 */ = {
+		AD58E8C31B59BA56004965D8 /* KKImages */ = {
 			isa = PBXGroup;
 			children = (
 				AD58E8C41B59BA56004965D8 /* Background.png */,
 				AD58E8CA1B59BAF4004965D8 /* LoadingScreen.png */,
 			);
+			name = KKImages;
 			path = KKImages2;
 			sourceTree = "<group>";
 		};
@@ -132,7 +133,7 @@
 				ADEF4CFF1B57155E00996C69 /* Images.xcassets */,
 				ADEF4D011B57155E00996C69 /* LaunchScreen.xib */,
 				ADEF4D1A1B57165000996C69 /* KKsprites.atlas */,
-				AD58E8C31B59BA56004965D8 /* KKImages2 */,
+				AD58E8C31B59BA56004965D8 /* KKImages */,
 				ADEF4D1E1B57165000996C69 /* KKIcons */,
 				ADEF4CF21B57155E00996C69 /* Supporting Files */,
 			);
