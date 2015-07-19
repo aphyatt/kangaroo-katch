@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AD58E8C21B597295004965D8 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD58E8C11B597295004965D8 /* Variables.swift */; };
-		AD58E8C61B59BA56004965D8 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = AD58E8C41B59BA56004965D8 /* Background.png */; };
-		AD58E8CB1B59BAF4004965D8 /* LoadingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = AD58E8CA1B59BAF4004965D8 /* LoadingScreen.png */; };
+		AD58E8CF1B5C3825004965D8 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = AD58E8CD1B5C3825004965D8 /* Background.png */; };
+		AD58E8D01B5C3825004965D8 /* LoadingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = AD58E8CE1B5C3825004965D8 /* LoadingScreen.png */; };
 		ADEF4CF51B57155E00996C69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CF41B57155E00996C69 /* AppDelegate.swift */; };
 		ADEF4CF91B57155E00996C69 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CF81B57155E00996C69 /* GameScene.swift */; };
 		ADEF4CFB1B57155E00996C69 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CFA1B57155E00996C69 /* GameViewController.swift */; };
@@ -45,8 +45,8 @@
 
 /* Begin PBXFileReference section */
 		AD58E8C11B597295004965D8 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
-		AD58E8C41B59BA56004965D8 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
-		AD58E8CA1B59BAF4004965D8 /* LoadingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingScreen.png; sourceTree = "<group>"; };
+		AD58E8CD1B5C3825004965D8 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
+		AD58E8CE1B5C3825004965D8 /* LoadingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingScreen.png; sourceTree = "<group>"; };
 		ADEF4CEF1B57155E00996C69 /* KangarooKatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KangarooKatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF4CF31B57155E00996C69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADEF4CF41B57155E00996C69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,14 +92,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AD58E8C31B59BA56004965D8 /* KKImages */ = {
+		AD58E8CC1B5C3825004965D8 /* KKImages */ = {
 			isa = PBXGroup;
 			children = (
-				AD58E8C41B59BA56004965D8 /* Background.png */,
-				AD58E8CA1B59BAF4004965D8 /* LoadingScreen.png */,
+				AD58E8CD1B5C3825004965D8 /* Background.png */,
+				AD58E8CE1B5C3825004965D8 /* LoadingScreen.png */,
 			);
-			name = KKImages;
-			path = KKImages2;
+			path = KKImages;
 			sourceTree = "<group>";
 		};
 		ADEF4CE61B57155E00996C69 = {
@@ -133,7 +132,7 @@
 				ADEF4CFF1B57155E00996C69 /* Images.xcassets */,
 				ADEF4D011B57155E00996C69 /* LaunchScreen.xib */,
 				ADEF4D1A1B57165000996C69 /* KKsprites.atlas */,
-				AD58E8C31B59BA56004965D8 /* KKImages */,
+				AD58E8CC1B5C3825004965D8 /* KKImages */,
 				ADEF4D1E1B57165000996C69 /* KKIcons */,
 				ADEF4CF21B57155E00996C69 /* Supporting Files */,
 			);
@@ -280,8 +279,8 @@
 				ADEF4D2D1B57165000996C69 /* Icon29.png in Resources */,
 				ADEF4D3B1B572B0D00996C69 /* soupofjustice.ttf in Resources */,
 				ADEF4D331B57165000996C69 /* Icon60.png in Resources */,
-				AD58E8C61B59BA56004965D8 /* Background.png in Resources */,
-				AD58E8CB1B59BAF4004965D8 /* LoadingScreen.png in Resources */,
+				AD58E8CF1B5C3825004965D8 /* Background.png in Resources */,
+				AD58E8D01B5C3825004965D8 /* LoadingScreen.png in Resources */,
 				ADEF4D341B57165000996C69 /* Icon60@2x.png in Resources */,
 				ADEF4D2E1B57165000996C69 /* Icon29@2x.png in Resources */,
 				ADEF4D321B57165000996C69 /* Icon40@3x.png in Resources */,
