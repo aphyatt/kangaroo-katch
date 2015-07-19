@@ -53,8 +53,8 @@ class GameScene: SKScene {
     var groupAmtMax: Int = 3
     
     //Variables dealing with touches (UI)
-    var moveToLeftCol: Bool = false
-    var moveToRightCol: Bool = false
+    var leftTouch: Bool = false
+    var rightTouch: Bool = false
     var moveToCenterCol: Bool = false
     var kangMoveLeft: SKAction
     var kangMoveRight: SKAction
@@ -407,7 +407,7 @@ class GameScene: SKScene {
         //have score rise and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveByX(0.0, y: 600, duration: 1.0)
+        let rise = SKAction.moveToY(600, duration: 1.0)
         let grow = SKAction.scaleBy(1.5, duration: 1.0)
         let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
@@ -651,65 +651,17 @@ class GameScene: SKScene {
     * within the case statement
     **********************************************************************************************************/
     func updateKangaroo() {
-        switch kangPos {
-        case 1:
-            if moveToLeftCol {
-                moveToLeftCol = false
-            }
-            if moveToRightCol {
-                kangPos += 2
-                kangaroo.runAction(kangMove2Right)
-                moveToRightCol = false
-            }
-            if moveToCenterCol {
-                kangPos++
-                kangaroo.runAction(kangMoveRight)
-                moveToCenterCol = false
-            }
-            break
-        case 2:
-            if moveToLeftCol {
-                kangPos--
-                kangaroo.runAction(kangMoveLeft)
-                moveToLeftCol = false
-            }
-            if moveToRightCol {
-                kangPos++
-                kangaroo.runAction(kangMoveRight)
-                moveToRightCol = false
-            }
-            if moveToCenterCol {
-                moveToCenterCol = false
-            }
-            break
-        default:
-            if moveToLeftCol {
-                kangPos -= 2
-                kangaroo.runAction(kangMove2Left)
-                moveToLeftCol = false
-            }
-            if moveToRightCol {
-                moveToRightCol = false
-            }
-            if moveToCenterCol {
-                kangPos--
-                kangaroo.runAction(kangMoveLeft)
-                moveToCenterCol = false
-            }
-        }
-        
-        if kangPos == 0 {
-            println("Error, kangPos = 0")
+        if leftTouch {
+            kangaroo.runAction(SKAction.moveToX(leftColX, duration: 0.1))
             kangPos = 1
-            //with Animation, wont need to move back
-            //(animation will be held to left already, leave that animation)
-            //same for case 4
-            kangaroo.runAction(kangMoveRight)
         }
-        if kangPos == 4 {
-            println("Error, kangPos = 4")
+        if rightTouch {
+            kangaroo.runAction(SKAction.moveToX(rightColX, duration: 0.1))
             kangPos = 3
-            kangaroo.runAction(kangMoveLeft)
+        }
+        if (!leftTouch && !rightTouch) || numFingers == 0 {
+            kangaroo.runAction(SKAction.moveToX(midColX, duration: 0.1))
+            kangPos = 2
         }
         
         switch kangPos {
@@ -729,22 +681,24 @@ class GameScene: SKScene {
             restartTap = true
         }
         if leftRect.contains(touchLocation) {
-            moveToLeftCol = true
-            moveToRightCol = false
+            leftTouch = true
+            rightTouch = false
         }
         if rightRect.contains(touchLocation) {
-            moveToRightCol = true
-            moveToLeftCol = false
+            rightTouch = true
+            leftTouch = false
         }
     }
     
     func sceneUntouched(touchLocation:CGPoint) {
-        if numFingers == 0 {
-            moveToCenterCol = true
+        let leftEndTouch = leftRect.contains(touchLocation)
+        let rightEndTouch = rightRect.contains(touchLocation)
+        
+        if leftEndTouch || (numFingers == 0) {
+            leftTouch = false
         }
-        if numFingers == 1 {
-            if rightRect.contains(touchLocation) { moveToLeftCol = true }
-            if leftRect.contains(touchLocation) { moveToRightCol = true }
+        if rightEndTouch || (numFingers == 0) {
+            rightTouch = false
         }
     }
     
