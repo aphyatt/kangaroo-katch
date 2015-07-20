@@ -58,10 +58,6 @@ class GameScene: SKScene {
     var leftTouch: Bool = false
     var rightTouch: Bool = false
     var moveToCenterCol: Bool = false
-    var kangMoveLeft: SKAction
-    var kangMoveRight: SKAction
-    var kangMove2Left: SKAction
-    var kangMove2Right: SKAction
     var kangPos: Int = 2
     var kangPosX: CGFloat = 0
     var numFingers: Int = 0
@@ -132,12 +128,6 @@ class GameScene: SKScene {
         fadeZoneRect = CGRect(x: playableMargin, y: dropletFadeBoundaryY - 5,
             width: playableWidth,
             height: 10)
-        
-        //these will eventually be animations, not actual movements
-        kangMoveLeft = SKAction.moveByX(-dropletRect.width/3.5, y: 0, duration: 0.1)
-        kangMoveRight = kangMoveLeft.reversedAction()
-        kangMove2Left = SKAction.moveByX(2*(-dropletRect.width/3.5), y: 0, duration: 0.1)
-        kangMove2Right = kangMove2Left.reversedAction()
         
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
@@ -334,36 +324,24 @@ class GameScene: SKScene {
     }
     
     func runGameOverAction() {
-        gameOverLabel.text = "GAME OVER"
-        gameOverLabel.fontSize = 70
-        gameOverLabel.verticalAlignmentMode = .Baseline
-        gameOverLabel.fontColor = SKColor.blackColor()
-        gameOverLabel.position = CGPoint(x: size.width/2, y: 800)
-        gameOverLabel.zPosition = 8
-        gameOverLabel.alpha = 0.0
-        addChild(gameOverLabel)
-        
-        gameOverLabelS.text = "GAME OVER"
-        gameOverLabelS.fontSize = 70
-        gameOverLabelS.verticalAlignmentMode = .Baseline
-        gameOverLabelS.fontColor = SKColor.whiteColor()
-        gameOverLabelS.position = CGPoint(x: size.width/2, y: 800-2)
-        gameOverLabelS.zPosition = 7
-        gameOverLabelS.alpha = 0.0
-        addChild(gameOverLabelS)
+        let gameOver = createShadowLabel("Soup of Justice", "GAME OVER", 70, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "gameOver", CGPoint(x: size.width/2, y: 780), 7)
+        gameOver[0].alpha = 0.0
+        gameOver[1].alpha = 0.0
+        addChild(gameOver[0])
+        addChild(gameOver[1])
         
         //fade in GAME OVER
         let wait = SKAction.waitForDuration(0.5)
         let fadeIn = SKAction.fadeAlphaTo(1.0, duration: 2.0)
         let gameOverAction = SKAction.sequence([wait, fadeIn])
-        let GOgroup = SKAction.group([SKAction.runBlock({self.gameOverLabel.runAction(gameOverAction)}),
-            SKAction.runBlock({self.gameOverLabelS.runAction(gameOverAction)})])
+        let GOgroup = SKAction.group([SKAction.runBlock({gameOver[0].runAction(gameOverAction)}),
+            SKAction.runBlock({gameOver[1].runAction(gameOverAction)})])
         runAction(GOgroup)
         
         //have score rise and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveByX(0.0, y: 600, duration: 1.0)
+        let rise = SKAction.moveByX(0.0, y: 580, duration: 1.0)
         let grow = SKAction.scaleBy(1.5, duration: 1.0)
         let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
@@ -371,35 +349,19 @@ class GameScene: SKScene {
         runAction(scoreGroup)
         
         //tap anywhere to restart
-        let tapRestartLabel = SKLabelNode(fontNamed: "Soup of Justice")
-        let tapRestartLabelS = SKLabelNode(fontNamed: "Soup of Justice")
-        
-        tapRestartLabel.text = "TAP ANYWHERE TO RESTART"
-        tapRestartLabel.fontSize = 20
-        tapRestartLabel.verticalAlignmentMode = .Baseline
-        tapRestartLabel.fontColor = SKColor.blackColor()
-        tapRestartLabel.position = CGPoint(x: size.width/2, y: 650)
-        tapRestartLabel.zPosition = 8
-        tapRestartLabel.alpha = 0.0
-        addChild(tapRestartLabel)
-        
-        tapRestartLabelS.text = "TAP ANYWHERE TO RESTART"
-        tapRestartLabelS.fontSize = 20
-        tapRestartLabelS.verticalAlignmentMode = .Baseline
-        tapRestartLabelS.fontColor = SKColor.whiteColor()
-        tapRestartLabelS.position = CGPoint(x: size.width/2, y: 650-2)
-        tapRestartLabelS.zPosition = 7
-        tapRestartLabelS.alpha = 0.0
-        addChild(tapRestartLabelS)
+        let tapRestart = createShadowLabel("Soup of Justice", "TAP ANYWHERE TO RESTART", 20, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "tapRestartLabel", CGPoint(x: size.width/2, y: 650), 7)
+        tapRestart[0].alpha = 0.0
+        tapRestart[1].alpha = 0.0
+        addChild(tapRestart[0])
+        addChild(tapRestart[1])
         
         let wait3 = SKAction.waitForDuration(5.0)
         let fadeIn2 = SKAction.fadeAlphaTo(1.0, duration: 0.8)
         let fadeOut = SKAction.fadeAlphaTo(0.0, duration: 0.8)
         let blink = SKAction.sequence([fadeIn2, fadeOut])
-        let labelsBlink = SKAction.group([SKAction.runBlock({tapRestartLabel.runAction(SKAction.repeatActionForever(blink))}),
-            SKAction.runBlock({tapRestartLabelS.runAction(SKAction.repeatActionForever(blink))})])
-        let tapAction = SKAction.sequence([wait3, labelsBlink])
-        runAction(tapAction)
+        let tapAction = SKAction.sequence([wait3, SKAction.repeatActionForever(blink)])
+        tapRestart[0].runAction(tapAction)
+        tapRestart[1].runAction(tapAction)
        
     }
     
@@ -788,13 +750,11 @@ class GameScene: SKScene {
         let fade = SKAction.fadeAlphaTo(0.3, duration: 0.1)
         joey.runAction(fade)
         
-        if dropsLeft > 0 {
         let dropLife = childNodeWithName("drop\(dropsLeft)")
         dropLife!.removeFromParent()
         dropsLeft--
         if(dropsLeft == 0) {
             gameState = .GameOver
-        }
         }
 
     }
@@ -826,13 +786,11 @@ class GameScene: SKScene {
         boomer.removeAllActions()
         boomer.runAction(SKAction.removeFromParent())
         
-        if livesLeft > 0 {
-            let life = childNodeWithName("life\(livesLeft)")
-            life!.removeFromParent()
-            livesLeft--
-            if(livesLeft == 0) {
-                gameState = .GameOver
-            }
+        let life = childNodeWithName("life\(livesLeft)")
+        life!.removeFromParent()
+        livesLeft--
+        if(livesLeft == 0) {
+            gameState = .GameOver
         }
         
     }
