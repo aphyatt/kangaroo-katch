@@ -34,6 +34,8 @@ class GameScene: SKScene {
     let catchZoneRect: CGRect
     let fadeZoneRect: CGRect
     let playableMargin: CGFloat
+    let horAlignModeDefault: SKLabelHorizontalAlignmentMode = .Center
+    let vertAlignModeDefault: SKLabelVerticalAlignmentMode = .Baseline
     
     let dropletCatchBoundaryY: CGFloat = 330
     let dropletFadeBoundaryY: CGFloat = 100
@@ -74,12 +76,8 @@ class GameScene: SKScene {
     var livesDropsX: CGFloat = 165
     var joeyLifeStartX: CGFloat
     var boomerangLifeStartX: CGFloat
-    let scoreLabel = SKLabelNode(fontNamed: "Soup of Justice")
-    let scoreLabelS = SKLabelNode(fontNamed: "Soup of Justice")
-    let livesLabel = SKLabelNode(fontNamed: "Soup of Justice")
-    let livesLabelS = SKLabelNode(fontNamed: "Soup of Justice")
-    let dropsLabel = SKLabelNode(fontNamed: "Soup of Justice")
-    let dropsLabelS = SKLabelNode(fontNamed: "Soup of Justice")
+    var scoreLabel : SKLabelNode!
+    var scoreLabelS : SKLabelNode!
     
     //Gameover vars
     var restartTap: Bool = false
@@ -170,57 +168,21 @@ class GameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
-        scoreLabel.text = "Score: \(score)"
-        scoreLabel.fontSize = 40
-        scoreLabel.verticalAlignmentMode = .Baseline
-        scoreLabel.fontColor = SKColor.blackColor()
-        scoreLabel.position = CGPoint(x: size.width/2, y: scoreLabelY)
-        scoreLabel.zPosition = 5
-        addChild(scoreLabel)
-        scoreLabel.runAction(SKAction.scaleTo(1.0, duration: 0.0))
-        
-        scoreLabelS.text = "Score: \(score)"
-        scoreLabelS.fontSize = 40
-        scoreLabelS.verticalAlignmentMode = .Baseline
-        scoreLabelS.fontColor = SKColor.whiteColor()
-        scoreLabelS.position = CGPoint(x: size.width/2, y: scoreLabelY-2)
-        scoreLabelS.zPosition = 4
-        addChild(scoreLabelS)
-        scoreLabelS.runAction(SKAction.scaleTo(1.0, duration: 0.0))
-        
         livesDropsX = 165 + playableMargin
         
-        livesLabel.text = "Lives: "
-        livesLabel.fontSize = 40
-        livesLabel.horizontalAlignmentMode = .Right
-        livesLabel.fontColor = SKColor.blackColor()
-        livesLabel.position = CGPoint(x: livesDropsX, y: livesLabelY)
-        livesLabel.zPosition = 5
-        addChild(livesLabel)
+        let livesLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Lives: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "livesLabel", CGPoint(x: livesDropsX, y: livesLabelY), 4)
+        addChild(livesLabel[0])
+        addChild(livesLabel[1])
+      
+        let dropsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Drops: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "dropsLabel", CGPoint(x: livesDropsX, y: dropsLabelY), 4)
+        addChild(dropsLabel[0])
+        addChild(dropsLabel[1])
         
-        livesLabelS.text = "Lives: "
-        livesLabelS.fontSize = 40
-        livesLabelS.horizontalAlignmentMode = .Right
-        livesLabelS.fontColor = SKColor.whiteColor()
-        livesLabelS.position = CGPoint(x: livesDropsX, y: livesLabelY-2)
-        livesLabelS.zPosition = 4
-        addChild(livesLabelS)
-        
-        dropsLabel.text = "Drops: "
-        dropsLabel.fontSize = 40
-        dropsLabel.horizontalAlignmentMode = .Right
-        dropsLabel.fontColor = SKColor.blackColor()
-        dropsLabel.position = CGPoint(x: livesDropsX, y: dropsLabelY)
-        dropsLabel.zPosition = 5
-        addChild(dropsLabel)
-        
-        dropsLabelS.text = "Drops: "
-        dropsLabelS.fontSize = 40
-        dropsLabelS.horizontalAlignmentMode = .Right
-        dropsLabelS.fontColor = SKColor.whiteColor()
-        dropsLabelS.position = CGPoint(x: livesDropsX, y: dropsLabelY-2)
-        dropsLabelS.zPosition = 4
-        addChild(dropsLabelS)
+        let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", 40, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreLabelY), 4)
+        scoreLabel = scoreLabelA[0]
+        scoreLabelS = scoreLabelA[1]
+        addChild(scoreLabel)
+        addChild(scoreLabelS)
         
     }
     
@@ -301,15 +263,9 @@ class GameScene: SKScene {
             shade.zPosition = 6
             addChild(shade)
             runGameOverAction()
-            
-            //delay boolean
-            let seconds = 5.0
-            let delay = seconds * Double(NSEC_PER_SEC)  // nanoseconds per seconds
-            var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-            dispatch_after(dispatchTime, dispatch_get_main_queue(), {
-                self.restartTapWait = true
-            })
-            
+            let wait = SKAction.waitForDuration(6.5)
+            let setBool = SKAction.runBlock({self.restartTapWait = true})
+            runAction(SKAction.sequence([wait,setBool]))
         }
         else {
             if restartTap {
@@ -407,7 +363,7 @@ class GameScene: SKScene {
         //have score rise and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveToY(600, duration: 1.0)
+        let rise = SKAction.moveByX(0.0, y: 600, duration: 1.0)
         let grow = SKAction.scaleBy(1.5, duration: 1.0)
         let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
