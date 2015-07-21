@@ -137,24 +137,25 @@ class MainMenu: SKScene {
     
     func sceneUntouched(touchLocation:CGPoint) {
         let shade = childNodeWithName("buttonDown")
-        shade!.removeFromParent()
+        if (shade != nil) {
+            shade!.removeFromParent()
         
-        if(classicRect.contains(touchLocation)) {
-            //transition to difficulty select scene
+            if(classicRect.contains(touchLocation)) {
+                //transition to difficulty select scene
+            }
+            else if(endlessRect.contains(touchLocation)) {
+                let myScene = GameScene(size: self.size, mode: GameMode.EndlessMode, difficulty: 0, joeys: 0, controls: Control.TwoHands)
+                myScene.scaleMode = self.scaleMode
+                let reveal = SKTransition.flipHorizontalWithDuration(0.5)
+                self.view?.presentScene(myScene, transition: reveal)
+            }
+            else if(multiRect.contains(touchLocation)) {
+                //multiplayer scene (?) good luck...
+            }
+            else if(settingsRect.contains(touchLocation)) {
+                //scene to choose sound options / controls (two hands or swiping)
+            }
         }
-        else if(endlessRect.contains(touchLocation)) {
-            let myScene = GameScene(size: self.size, mode: GameMode.EndlessMode, difficulty: 0, joeys: 0, controls: Control.TwoHands)
-            myScene.scaleMode = self.scaleMode
-            let reveal = SKTransition.flipHorizontalWithDuration(0.5)
-            self.view?.presentScene(myScene, transition: reveal)
-        }
-        else if(multiRect.contains(touchLocation)) {
-            //multiplayer scene (?) good luck...
-        }
-        else if(settingsRect.contains(touchLocation)) {
-            //scene to choose sound options / controls (two hands or swiping)
-        }
-        
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {

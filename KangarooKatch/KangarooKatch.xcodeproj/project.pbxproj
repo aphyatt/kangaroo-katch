@@ -7,21 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD58E8C21B597295004965D8 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD58E8C11B597295004965D8 /* Variables.swift */; };
-		AD6776721B5C9FE3004D3A71 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6776711B5C9FE3004D3A71 /* MainMenu.swift */; };
 		AD6776791B5CAD1D004D3A71 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = AD6776761B5CAD1D004D3A71 /* Background.png */; };
 		AD67767A1B5CAD1D004D3A71 /* LoadingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = AD6776771B5CAD1D004D3A71 /* LoadingScreen.png */; };
 		AD917D7A1B5DD46700B4E919 /* ImageBoundary.png in Resources */ = {isa = PBXBuildFile; fileRef = AD917D791B5DD46700B4E919 /* ImageBoundary.png */; };
 		AD917D7C1B5DD46C00B4E919 /* MainMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = AD917D7B1B5DD46C00B4E919 /* MainMenu.png */; };
 		AD917D801B5DDEDD00B4E919 /* ButtonImage.png in Resources */ = {isa = PBXBuildFile; fileRef = AD917D7F1B5DDEDD00B4E919 /* ButtonImage.png */; };
-		ADEF4CF51B57155E00996C69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CF41B57155E00996C69 /* AppDelegate.swift */; };
-		ADEF4CF91B57155E00996C69 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CF81B57155E00996C69 /* GameScene.swift */; };
-		ADEF4CFB1B57155E00996C69 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4CFA1B57155E00996C69 /* GameViewController.swift */; };
+		AD917D8D1B5E019E00B4E919 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D871B5E019E00B4E919 /* AppDelegate.swift */; };
+		AD917D8E1B5E019E00B4E919 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D881B5E019E00B4E919 /* GameScene.swift */; };
+		AD917D8F1B5E019E00B4E919 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D891B5E019E00B4E919 /* GameViewController.swift */; };
+		AD917D901B5E019E00B4E919 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D8A1B5E019E00B4E919 /* MainMenu.swift */; };
+		AD917D911B5E019E00B4E919 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D8B1B5E019E00B4E919 /* MyUtils.swift */; };
+		AD917D921B5E019E00B4E919 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD917D8C1B5E019E00B4E919 /* Variables.swift */; };
+		AD917D951B5E01CD00B4E919 /* soupofjustice.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD917D941B5E01CD00B4E919 /* soupofjustice.ttf */; };
 		ADEF4CFE1B57155E00996C69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4CFC1B57155E00996C69 /* Main.storyboard */; };
 		ADEF4D001B57155E00996C69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4CFF1B57155E00996C69 /* Images.xcassets */; };
 		ADEF4D031B57155E00996C69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D011B57155E00996C69 /* LaunchScreen.xib */; };
 		ADEF4D0F1B57155F00996C69 /* KangarooKatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4D0E1B57155F00996C69 /* KangarooKatchTests.swift */; };
-		ADEF4D191B57162500996C69 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4D181B57162500996C69 /* MyUtils.swift */; };
 		ADEF4D2A1B57165000996C69 /* KKsprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D1A1B57165000996C69 /* KKsprites.atlas */; };
 		ADEF4D2D1B57165000996C69 /* Icon29.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D1F1B57165000996C69 /* Icon29.png */; };
 		ADEF4D2E1B57165000996C69 /* Icon29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D201B57165000996C69 /* Icon29@2x.png */; };
@@ -34,7 +35,6 @@
 		ADEF4D351B57165000996C69 /* Icon60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D271B57165000996C69 /* Icon60@3x.png */; };
 		ADEF4D361B57165000996C69 /* Icon76.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D281B57165000996C69 /* Icon76.png */; };
 		ADEF4D371B57165000996C69 /* Icon76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D291B57165000996C69 /* Icon76@2x.png */; };
-		ADEF4D3B1B572B0D00996C69 /* soupofjustice.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D3A1B572B0D00996C69 /* soupofjustice.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,25 +48,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AD58E8C11B597295004965D8 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
-		AD6776711B5C9FE3004D3A71 /* MainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainMenu.swift; path = ../MainMenu.swift; sourceTree = "<group>"; };
 		AD6776761B5CAD1D004D3A71 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
 		AD6776771B5CAD1D004D3A71 /* LoadingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingScreen.png; sourceTree = "<group>"; };
 		AD917D791B5DD46700B4E919 /* ImageBoundary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImageBoundary.png; sourceTree = "<group>"; };
 		AD917D7B1B5DD46C00B4E919 /* MainMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MainMenu.png; sourceTree = "<group>"; };
 		AD917D7F1B5DDEDD00B4E919 /* ButtonImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ButtonImage.png; sourceTree = "<group>"; };
+		AD917D841B5E018600B4E919 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD917D871B5E019E00B4E919 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AD917D881B5E019E00B4E919 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		AD917D891B5E019E00B4E919 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		AD917D8A1B5E019E00B4E919 /* MainMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		AD917D8B1B5E019E00B4E919 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
+		AD917D8C1B5E019E00B4E919 /* Variables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
+		AD917D941B5E01CD00B4E919 /* soupofjustice.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = soupofjustice.ttf; sourceTree = "<group>"; };
 		ADEF4CEF1B57155E00996C69 /* KangarooKatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KangarooKatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADEF4CF31B57155E00996C69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ADEF4CF41B57155E00996C69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		ADEF4CF81B57155E00996C69 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		ADEF4CFA1B57155E00996C69 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		ADEF4CFD1B57155E00996C69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ADEF4CFF1B57155E00996C69 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ADEF4D021B57155E00996C69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		ADEF4D081B57155F00996C69 /* KangarooKatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KangarooKatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF4D0D1B57155F00996C69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADEF4D0E1B57155F00996C69 /* KangarooKatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KangarooKatchTests.swift; sourceTree = "<group>"; };
-		ADEF4D181B57162500996C69 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
 		ADEF4D1A1B57165000996C69 /* KKsprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = KKsprites.atlas; sourceTree = "<group>"; };
 		ADEF4D1F1B57165000996C69 /* Icon29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon29.png; sourceTree = "<group>"; };
 		ADEF4D201B57165000996C69 /* Icon29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon29@2x.png"; sourceTree = "<group>"; };
@@ -79,7 +80,6 @@
 		ADEF4D271B57165000996C69 /* Icon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon60@3x.png"; sourceTree = "<group>"; };
 		ADEF4D281B57165000996C69 /* Icon76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon76.png; sourceTree = "<group>"; };
 		ADEF4D291B57165000996C69 /* Icon76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon76@2x.png"; sourceTree = "<group>"; };
-		ADEF4D3A1B572B0D00996C69 /* soupofjustice.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = soupofjustice.ttf; path = KangarooKatch/soupofjustice.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,11 +112,40 @@
 			path = KKImages;
 			sourceTree = "<group>";
 		};
+		AD917D831B5E018600B4E919 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD917D841B5E018600B4E919 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AD917D861B5E019E00B4E919 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				AD917D871B5E019E00B4E919 /* AppDelegate.swift */,
+				AD917D881B5E019E00B4E919 /* GameScene.swift */,
+				AD917D891B5E019E00B4E919 /* GameViewController.swift */,
+				AD917D8A1B5E019E00B4E919 /* MainMenu.swift */,
+				AD917D8B1B5E019E00B4E919 /* MyUtils.swift */,
+				AD917D8C1B5E019E00B4E919 /* Variables.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		AD917D931B5E01CD00B4E919 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				AD917D941B5E01CD00B4E919 /* soupofjustice.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		ADEF4CE61B57155E00996C69 = {
 			isa = PBXGroup;
 			children = (
 				ADEF4CF11B57155E00996C69 /* KangarooKatch */,
-				ADEF4D381B5724F000996C69 /* Fonts */,
+				AD917D931B5E01CD00B4E919 /* Fonts */,
 				ADEF4D0B1B57155F00996C69 /* KangarooKatchTests */,
 				ADEF4CF01B57155E00996C69 /* Products */,
 			);
@@ -134,29 +163,16 @@
 		ADEF4CF11B57155E00996C69 /* KangarooKatch */ = {
 			isa = PBXGroup;
 			children = (
-				AD6776711B5C9FE3004D3A71 /* MainMenu.swift */,
-				ADEF4CF41B57155E00996C69 /* AppDelegate.swift */,
-				ADEF4CF81B57155E00996C69 /* GameScene.swift */,
-				AD58E8C11B597295004965D8 /* Variables.swift */,
-				ADEF4CFA1B57155E00996C69 /* GameViewController.swift */,
-				ADEF4D181B57162500996C69 /* MyUtils.swift */,
+				AD917D861B5E019E00B4E919 /* Classes */,
 				ADEF4CFC1B57155E00996C69 /* Main.storyboard */,
 				ADEF4CFF1B57155E00996C69 /* Images.xcassets */,
 				ADEF4D011B57155E00996C69 /* LaunchScreen.xib */,
 				ADEF4D1A1B57165000996C69 /* KKsprites.atlas */,
 				AD6776751B5CAD1D004D3A71 /* KKImages */,
 				ADEF4D1E1B57165000996C69 /* KKIcons */,
-				ADEF4CF21B57155E00996C69 /* Supporting Files */,
+				AD917D831B5E018600B4E919 /* Supporting Files */,
 			);
 			path = KangarooKatch;
-			sourceTree = "<group>";
-		};
-		ADEF4CF21B57155E00996C69 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				ADEF4CF31B57155E00996C69 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		ADEF4D0B1B57155F00996C69 /* KangarooKatchTests */ = {
@@ -192,14 +208,6 @@
 				ADEF4D291B57165000996C69 /* Icon76@2x.png */,
 			);
 			path = KKIcons;
-			sourceTree = "<group>";
-		};
-		ADEF4D381B5724F000996C69 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				ADEF4D3A1B572B0D00996C69 /* soupofjustice.ttf */,
-			);
-			name = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,7 +297,6 @@
 				ADEF4D2A1B57165000996C69 /* KKsprites.atlas in Resources */,
 				ADEF4D311B57165000996C69 /* Icon40@2x.png in Resources */,
 				ADEF4D2D1B57165000996C69 /* Icon29.png in Resources */,
-				ADEF4D3B1B572B0D00996C69 /* soupofjustice.ttf in Resources */,
 				ADEF4D331B57165000996C69 /* Icon60.png in Resources */,
 				AD917D801B5DDEDD00B4E919 /* ButtonImage.png in Resources */,
 				AD917D7A1B5DD46700B4E919 /* ImageBoundary.png in Resources */,
@@ -298,6 +305,7 @@
 				ADEF4D341B57165000996C69 /* Icon60@2x.png in Resources */,
 				ADEF4D2E1B57165000996C69 /* Icon29@2x.png in Resources */,
 				ADEF4D321B57165000996C69 /* Icon40@3x.png in Resources */,
+				AD917D951B5E01CD00B4E919 /* soupofjustice.ttf in Resources */,
 				ADEF4D2F1B57165000996C69 /* Icon29@3x.png in Resources */,
 				ADEF4D301B57165000996C69 /* Icon40.png in Resources */,
 				AD917D7C1B5DD46C00B4E919 /* MainMenu.png in Resources */,
@@ -320,12 +328,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADEF4CF91B57155E00996C69 /* GameScene.swift in Sources */,
-				AD6776721B5C9FE3004D3A71 /* MainMenu.swift in Sources */,
-				ADEF4CFB1B57155E00996C69 /* GameViewController.swift in Sources */,
-				ADEF4CF51B57155E00996C69 /* AppDelegate.swift in Sources */,
-				ADEF4D191B57162500996C69 /* MyUtils.swift in Sources */,
-				AD58E8C21B597295004965D8 /* Variables.swift in Sources */,
+				AD917D8E1B5E019E00B4E919 /* GameScene.swift in Sources */,
+				AD917D911B5E019E00B4E919 /* MyUtils.swift in Sources */,
+				AD917D8F1B5E019E00B4E919 /* GameViewController.swift in Sources */,
+				AD917D921B5E019E00B4E919 /* Variables.swift in Sources */,
+				AD917D8D1B5E019E00B4E919 /* AppDelegate.swift in Sources */,
+				AD917D901B5E019E00B4E919 /* MainMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,7 +462,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = KangarooKatch/Info.plist;
+				INFOPLIST_FILE = "KangarooKatch/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -464,7 +472,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_FILE = KangarooKatch/Info.plist;
+				INFOPLIST_FILE = "KangarooKatch/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
