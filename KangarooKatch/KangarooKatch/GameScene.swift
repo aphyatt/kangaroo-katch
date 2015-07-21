@@ -8,23 +8,11 @@
 
 import SpriteKit
 
-enum GameState {
-    case GameRunning
-    case GameOver
-}
-
 class GameScene: SKScene {
-    /* NOTES:
-    * TODO check collisions (for boomerangs)
-    * Instead of physically moving kangaroo, run animation of it holding out pouch
-    * Add animations to falling objects / kangaroo to beef up game
-    * Score
-    * Other screens: selection, highscore, tutorial
-    * See how low timeBetweenLines can be set without lag, otherwise increase gravity
-    */
-    //let dropletLayerNode = SKNode()
-    //let livesLayerNode = SKNode()
 
+    var gameState = GameState.GameRunning
+    var gameMode: GameMode
+    
     let kangaroo = SKSpriteNode(imageNamed: "Kangaroo")
     let fullRect: CGRect
     let sceneRect: CGRect
@@ -78,12 +66,11 @@ class GameScene: SKScene {
     //Gameover vars
     var restartTap: Bool = false
     var restartTapWait: Bool = false
-    var gameState = GameState.GameRunning
     let gameOverLabel = SKLabelNode(fontNamed: "Soup of Justice")
     let gameOverLabelS = SKLabelNode(fontNamed: "Soup of Justice")
     
     //Difficulty variables
-    var diffLevel: Int = 0
+    var diffLevel: Int
     var changeDiff: Bool = false
     let V_EASY = 0
     let EASY = 1
@@ -103,7 +90,7 @@ class GameScene: SKScene {
         //debugDrawPlayableArea()
     }
     
-    override init(size: CGSize) {
+    init(size: CGSize, mode: GameMode, difficulty: Int, joeys: Int, controls: Control) {
         let maxAspectRatio:CGFloat = 16.0/9.0
         let playableWidth = size.height / maxAspectRatio
         playableMargin = (size.width-playableWidth)/2.0
@@ -136,10 +123,16 @@ class GameScene: SKScene {
         joeyLifeStartX = livesDropsX + 130
         boomerangLifeStartX = livesDropsX + 145
         
+        gameMode = mode
+        diffLevel = difficulty
+        
         super.init(size: size)
         
         setupScene()
-        setupLives()
+        if (gameMode == GameMode.EndlessMode) {
+            setupLives()
+        }
+        
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -158,16 +151,6 @@ class GameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
-        livesDropsX = 165 + playableMargin
-        
-        let livesLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Lives: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "livesLabel", CGPoint(x: livesDropsX, y: livesLabelY), 4)
-        addChild(livesLabel[0])
-        addChild(livesLabel[1])
-      
-        let dropsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Drops: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "dropsLabel", CGPoint(x: livesDropsX, y: dropsLabelY), 4)
-        addChild(dropsLabel[0])
-        addChild(dropsLabel[1])
-        
         let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", 40, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreLabelY), 4)
         scoreLabel = scoreLabelA[0]
         scoreLabelS = scoreLabelA[1]
@@ -177,6 +160,16 @@ class GameScene: SKScene {
     }
     
     func setupLives() {
+        livesDropsX = 165 + playableMargin
+        
+        let livesLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Lives: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "livesLabel", CGPoint(x: livesDropsX, y: livesLabelY), 4)
+        addChild(livesLabel[0])
+        addChild(livesLabel[1])
+        
+        let dropsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Drops: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "dropsLabel", CGPoint(x: livesDropsX, y: dropsLabelY), 4)
+        addChild(dropsLabel[0])
+        addChild(dropsLabel[1])
+        
         for i in 0...9 {
             let node = SKSpriteNode(imageNamed: "Egg")
             let nodeS = SKSpriteNode(imageNamed: "Egg")

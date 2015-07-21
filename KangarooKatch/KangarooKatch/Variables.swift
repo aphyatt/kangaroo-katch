@@ -9,6 +9,21 @@
 import Foundation
 import SpriteKit
 
+enum GameMode {
+    case ClassicMode
+    case EndlessMode
+    case MultiplayerMode
+}
+
+enum Control {
+    case Swipe
+    case TwoHands
+}
+
+enum GameState {
+    case GameRunning
+    case GameOver
+}
 
 let allLines: [[Int]] = [ [1,0,0], [1,0,2], [1,2,0], [1,2,2],
     [0,1,0], [0,1,2], [2,1,0], [2,1,2],
