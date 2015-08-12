@@ -151,11 +151,25 @@ class GameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
-        let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", 40, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreLabelY), 4)
+        var scoreSize: CGFloat
+        var scoreY: CGFloat
+        if (gameMode == GameMode.ClassicMode) {
+            scoreSize = 60
+            scoreY = scoreLabelY - 50
+        }
+        else {
+            scoreSize = 40
+            scoreY = scoreLabelY
+        }
+        let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", scoreSize, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreY), 4)
         scoreLabel = scoreLabelA[0]
         scoreLabelS = scoreLabelA[1]
         addChild(scoreLabel)
         addChild(scoreLabelS)
+        
+        if (gameMode == GameMode.ClassicMode) {
+            //add countDown egg label
+        }
         
     }
     
