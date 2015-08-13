@@ -16,8 +16,8 @@ enum GameMode {
 }
 
 enum Control {
-    case Swipe
-    case TwoHands
+    case Thumb
+    case TwoThumbs
 }
 
 enum GameState {

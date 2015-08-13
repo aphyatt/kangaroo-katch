@@ -144,7 +144,7 @@ class MainMenu: SKScene {
                 //transition to difficulty select scene
             }
             else if(endlessRect.contains(touchLocation)) {
-                let myScene = GameScene(size: self.size, mode: GameMode.EndlessMode, difficulty: 0, joeys: 0, controls: Control.TwoHands)
+                let myScene = GameScene(size: self.size, mode: GameMode.EndlessMode, difficulty: 0, joeys: 0, controls: Control.Thumb)
                 myScene.scaleMode = self.scaleMode
                 let reveal = SKTransition.flipHorizontalWithDuration(0.5)
                 self.view?.presentScene(myScene, transition: reveal)

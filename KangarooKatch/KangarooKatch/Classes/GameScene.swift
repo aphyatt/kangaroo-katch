@@ -12,8 +12,8 @@ class GameScene: SKScene {
 
     var gameState = GameState.GameRunning
     var gameMode: GameMode
+    var controlSettings: Control
     
-    let kangaroo = SKSpriteNode(imageNamed: "Kangaroo")
     let fullRect: CGRect
     let sceneRect: CGRect
     let dropletRect: CGRect
@@ -21,7 +21,11 @@ class GameScene: SKScene {
     let rightRect: CGRect
     let catchZoneRect: CGRect
     let fadeZoneRect: CGRect
+    let oneThirdX: CGFloat
+    let twoThirdX: CGFloat
     let playableMargin: CGFloat
+    
+    let kangaroo = SKSpriteNode(imageNamed: "Kangaroo")
     let horAlignModeDefault: SKLabelHorizontalAlignmentMode = .Center
     let vertAlignModeDefault: SKLabelVerticalAlignmentMode = .Baseline
     
@@ -41,6 +45,7 @@ class GameScene: SKScene {
     var groupWaitTimeMax: CGFloat = 3.0
     var groupAmtMin: Int = 2
     var groupAmtMax: Int = 3
+    var kangSpeed: NSTimeInterval
     
     //Variables dealing with touches (UI)
     var leftTouch: Bool = false
@@ -115,6 +120,8 @@ class GameScene: SKScene {
         fadeZoneRect = CGRect(x: playableMargin, y: dropletFadeBoundaryY - 5,
             width: playableWidth,
             height: 10)
+        oneThirdX = playableMargin + (playableWidth/3)
+        twoThirdX = playableMargin + (playableWidth*(2/3))
         
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
@@ -124,6 +131,14 @@ class GameScene: SKScene {
         boomerangLifeStartX = livesDropsX + 145
         
         gameMode = mode
+        controlSettings = controls
+        kangSpeed = 0.1
+        if(controlSettings == .Thumb) {
+            kangSpeed = 0.05
+        }
+        if(controlSettings == .TwoThumbs) {
+            kangSpeed = 0.1
+        }
         diffLevel = difficulty
         
         super.init(size: size)
@@ -577,15 +592,15 @@ class GameScene: SKScene {
     **********************************************************************************************************/
     func updateKangaroo() {
         if leftTouch {
-            kangaroo.runAction(SKAction.moveToX(leftColX, duration: 0.1))
+            kangaroo.runAction(SKAction.moveToX(leftColX, duration: kangSpeed))
             kangPos = 1
         }
         if rightTouch {
-            kangaroo.runAction(SKAction.moveToX(rightColX, duration: 0.1))
+            kangaroo.runAction(SKAction.moveToX(rightColX, duration: kangSpeed))
             kangPos = 3
         }
         if (!leftTouch && !rightTouch) || numFingers == 0 {
-            kangaroo.runAction(SKAction.moveToX(midColX, duration: 0.1))
+            kangaroo.runAction(SKAction.moveToX(midColX, duration: kangSpeed))
             kangPos = 2
         }
         
@@ -601,7 +616,7 @@ class GameScene: SKScene {
     
     /********************** Update Kangaroo Helper Functions ****************************/
     
-    func sceneTouched(touchLocation:CGPoint) {
+    func sceneTouchedTwoThumbs(touchLocation:CGPoint) {
         if (gameState == .GameOver) && restartTapWait {
             restartTap = true
         }
@@ -615,7 +630,7 @@ class GameScene: SKScene {
         }
     }
     
-    func sceneUntouched(touchLocation:CGPoint) {
+    func sceneUntouchedTwoThumbs(touchLocation:CGPoint) {
         let leftEndTouch = leftRect.contains(touchLocation)
         let rightEndTouch = rightRect.contains(touchLocation)
         
@@ -627,18 +642,71 @@ class GameScene: SKScene {
         }
     }
     
+    func sceneTouchedThumb(touchLocation:CGPoint) {
+        if (gameState == .GameOver) && restartTapWait {
+            restartTap = true
+        }
+        if touchLocation.x < oneThirdX {
+            leftTouch = true
+            rightTouch = false
+        }
+        if touchLocation.x > twoThirdX {
+            rightTouch = true
+            leftTouch = false
+        }
+    }
+    
+    func sceneUntouchedThumb(touchLocation:CGPoint) {
+        if numFingers == 0 {
+            leftTouch = false
+            rightTouch = false
+        }
+    }
+    
+    func trackThumb(touchLocation:CGPoint) {
+        if touchLocation.x < oneThirdX {
+            leftTouch = true
+            rightTouch = false
+        }
+        else if touchLocation.x > twoThirdX {
+            rightTouch = true
+            leftTouch = false
+        }
+        else {
+            leftTouch = false
+            rightTouch = false
+        }
+    }
+    
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         numFingers += touches.count
-        sceneTouched(touchLocation)
+        if(controlSettings == .TwoThumbs) {
+            sceneTouchedTwoThumbs(touchLocation)
+        }
+        if(controlSettings == .Thumb) {
+            sceneTouchedThumb(touchLocation)
+        }
+       
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
+        let touchLocation = touch.locationInNode(self)
+        trackThumb(touchLocation)
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         numFingers -= touches.count
-        sceneUntouched(touchLocation)
+        if(controlSettings == .TwoThumbs) {
+            sceneUntouchedTwoThumbs(touchLocation)
+        }
+        if(controlSettings == .Thumb) {
+            sceneUntouchedThumb(touchLocation)
+        }
     }
     
     /*********************************************************************************************************
