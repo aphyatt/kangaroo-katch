@@ -46,7 +46,7 @@ class MainMenu: SKScene {
             labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
             name: "classicLabel",
             positon: CGPoint(x: size.width/2, y: classicY-15),
-            shadowZPos: 2, shadowOffset: 3)
+            shadowZPos: 2, shadowOffset: 2)
         classicLabel[0].runAction(stretch)
         classicLabel[1].runAction(stretch)
         
@@ -56,7 +56,7 @@ class MainMenu: SKScene {
             labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
             name: "endlessLabel",
             positon: CGPoint(x: size.width/2, y: endlessY-15),
-            shadowZPos: 2, shadowOffset: 3)
+            shadowZPos: 2, shadowOffset: 2)
         endlessLabel[0].runAction(stretch)
         endlessLabel[1].runAction(stretch)
         
@@ -66,7 +66,7 @@ class MainMenu: SKScene {
             labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
             name: "multiplayerLabel",
             positon: CGPoint(x: size.width/2, y: multiY-15),
-            shadowZPos: 2, shadowOffset: 3)
+            shadowZPos: 2, shadowOffset: 2)
         multiplayerLabel[0].runAction(stretch)
         multiplayerLabel[1].runAction(stretch)
         
@@ -76,7 +76,7 @@ class MainMenu: SKScene {
             labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
             name: "settingsLabel",
             positon: CGPoint(x: size.width/2, y: settingsY-15),
-            shadowZPos: 2, shadowOffset: 3)
+            shadowZPos: 2, shadowOffset: 2)
         settingsLabel[0].runAction(stretch)
         settingsLabel[1].runAction(stretch)
         
@@ -179,7 +179,10 @@ class MainMenu: SKScene {
                 //multiplayer scene (?) good luck...
             }
             else if(settingsRect.contains(touchLocation)) {
-                //scene to choose sound options / controls (two hands or swiping)
+                myScene = Settings(size: self.size)
+                myScene.scaleMode = self.scaleMode
+                let reveal = SKTransition.flipHorizontalWithDuration(0.5)
+                self.view?.presentScene(myScene, transition: reveal)
             }
         }
     }
