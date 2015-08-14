@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD5A6BE11B7D6C0600BEFB5E /* ClassicGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5A6BE01B7D6C0600BEFB5E /* ClassicGameScene.swift */; };
 		AD6776791B5CAD1D004D3A71 /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = AD6776761B5CAD1D004D3A71 /* Background.png */; };
 		AD67767A1B5CAD1D004D3A71 /* LoadingScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = AD6776771B5CAD1D004D3A71 /* LoadingScreen.png */; };
 		AD917D7A1B5DD46700B4E919 /* ImageBoundary.png in Resources */ = {isa = PBXBuildFile; fileRef = AD917D791B5DD46700B4E919 /* ImageBoundary.png */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD5A6BE01B7D6C0600BEFB5E /* ClassicGameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassicGameScene.swift; sourceTree = "<group>"; };
 		AD6776761B5CAD1D004D3A71 /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Background.png; sourceTree = "<group>"; };
 		AD6776771B5CAD1D004D3A71 /* LoadingScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingScreen.png; sourceTree = "<group>"; };
 		AD917D791B5DD46700B4E919 /* ImageBoundary.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ImageBoundary.png; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			children = (
 				AD917D871B5E019E00B4E919 /* AppDelegate.swift */,
 				AD917D881B5E019E00B4E919 /* GameScene.swift */,
+				AD5A6BE01B7D6C0600BEFB5E /* ClassicGameScene.swift */,
 				AD917D891B5E019E00B4E919 /* GameViewController.swift */,
 				AD917D8A1B5E019E00B4E919 /* MainMenu.swift */,
 				AD917D8B1B5E019E00B4E919 /* MyUtils.swift */,
@@ -331,6 +334,7 @@
 				AD917D8E1B5E019E00B4E919 /* GameScene.swift in Sources */,
 				AD917D911B5E019E00B4E919 /* MyUtils.swift in Sources */,
 				AD917D8F1B5E019E00B4E919 /* GameViewController.swift in Sources */,
+				AD5A6BE11B7D6C0600BEFB5E /* ClassicGameScene.swift in Sources */,
 				AD917D921B5E019E00B4E919 /* Variables.swift in Sources */,
 				AD917D8D1B5E019E00B4E919 /* AppDelegate.swift in Sources */,
 				AD917D901B5E019E00B4E919 /* MainMenu.swift in Sources */,

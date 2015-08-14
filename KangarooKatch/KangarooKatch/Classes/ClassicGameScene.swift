@@ -8,8 +8,8 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
-
+class ClassicGameScene: SKScene {
+    
     var gameState = GameState.GameRunning
     var controlSettings: Control
     
@@ -128,7 +128,7 @@ class GameScene: SKScene {
         
         joeyLifeStartX = livesDropsX + 130
         boomerangLifeStartX = livesDropsX + 175
-  
+        
         controlSettings = controls
         kangSpeed = 0.1
         if(controlSettings == .Thumb) {
@@ -142,7 +142,6 @@ class GameScene: SKScene {
         super.init(size: size)
         
         setupScene()
-        setupLives()
         
     }
     
@@ -165,9 +164,9 @@ class GameScene: SKScene {
         var scoreY: CGFloat = 0
         var scoreSize: CGFloat = 0
      
-        scoreSize = 70
-        scoreY = scoreLabelY
-   
+        scoreSize = 60
+        scoreY = scoreLabelY - 50
+       
         let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(score)",
             fontSize: scoreSize,
             horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
@@ -180,68 +179,8 @@ class GameScene: SKScene {
         addChild(scoreLabel)
         addChild(scoreLabelS)
         
-    }
-    
-    func setupLives() {
-        livesDropsX = 165 + playableMargin
+        //add countDown egg label
         
-        let livesLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Lives: ",
-            fontSize: 50,
-            horAlignMode: .Right, vertAlignMode: vertAlignModeDefault,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
-            name: "livesLabel",
-            positon: CGPoint(x: livesDropsX, y: livesLabelY),
-            shadowZPos: 4, shadowOffset: 2)
-        addChild(livesLabel[0])
-        addChild(livesLabel[1])
-        
-        let dropsLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Drops: ",
-            fontSize: 50,
-            horAlignMode: .Right, vertAlignMode: vertAlignModeDefault,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
-            name: "dropsLabel",
-            positon: CGPoint(x: livesDropsX, y: dropsLabelY),
-            shadowZPos: 4, shadowOffset: 2)
-        addChild(dropsLabel[0])
-        addChild(dropsLabel[1])
-        
-        for i in 0...9 {
-            let node = SKSpriteNode(imageNamed: "Egg")
-            let nodeS = SKSpriteNode(imageNamed: "Egg")
-            
-            node.position.x = joeyLifeStartX + CGFloat(i)*38
-            node.position.y = dropsLabelY+12
-            node.setScale(0.07)
-            node.zPosition = 5
-            node.name = "drop\(i+1)"
-            
-            nodeS.position = node.position
-            nodeS.setScale(0.07)
-            nodeS.zPosition = 4
-            nodeS.alpha = 0.5
-            
-            addChild(node)
-            addChild(nodeS)
-        }
-        
-        for i in 0...2 {
-            let node = SKSpriteNode(imageNamed: "Boomerang")
-            let nodeS = SKSpriteNode(imageNamed: "Boomerang")
-            
-            node.position.x = boomerangLifeStartX + CGFloat(i)*100
-            node.position.y = livesLabelY+12
-            node.setScale(0.15)
-            node.zPosition = 5
-            node.name = "life\(i+1)"
-            
-            nodeS.position = node.position
-            nodeS.setScale(0.12)
-            nodeS.zPosition = 4
-            nodeS.alpha = 0.5
-            
-            addChild(node)
-            addChild(nodeS)
-        }
     }
     
     /*********************************************************************************************************
@@ -303,8 +242,6 @@ class GameScene: SKScene {
         score = 0
         diffLevel = 0
         setupScene()
-        //add score, drops and lives labels
-        setupLives()
         //set difficulty, speeds, ect.
         timeBetweenLines = 0.5
         totalLinesDropped = 0
@@ -402,7 +339,7 @@ class GameScene: SKScene {
         let tapAction = SKAction.sequence([wait3, SKAction.repeatActionForever(blink)])
         tapRestart[0].runAction(tapAction)
         tapRestart[1].runAction(tapAction)
-       
+        
     }
     
     /*********************************************************************************************************
@@ -706,7 +643,7 @@ class GameScene: SKScene {
         if(controlSettings == .Thumb) {
             sceneTouchedThumb(touchLocation)
         }
-       
+        
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -838,7 +775,7 @@ class GameScene: SKScene {
     
     func kangarooMissedJoey(joey: SKSpriteNode) {
         //runAction(missedJoeySound) aaahh
-
+        
         //make fade rect like catchzone, in checkcollision if missed hits fadezone, then stop and fade
         let fade = SKAction.fadeAlphaTo(0.3, duration: 0.1)
         joey.runAction(fade)
@@ -849,7 +786,7 @@ class GameScene: SKScene {
         if(dropsLeft == 0) {
             gameState = .GameOver
         }
-
+        
     }
     
     func stopAndFadeJoey(joey: SKSpriteNode) {

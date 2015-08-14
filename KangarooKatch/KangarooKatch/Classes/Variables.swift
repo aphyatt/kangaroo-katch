@@ -9,12 +9,6 @@
 import Foundation
 import SpriteKit
 
-enum GameMode {
-    case ClassicMode
-    case EndlessMode
-    case MultiplayerMode
-}
-
 enum Control {
     case Thumb
     case TwoThumbs

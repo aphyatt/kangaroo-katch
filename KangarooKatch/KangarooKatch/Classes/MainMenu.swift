@@ -10,8 +10,6 @@ import Foundation
 import SpriteKit
 
 class MainMenu: SKScene {
-    var gameModeSelected: GameMode!
-    
     let classicRect: CGRect
     let endlessRect: CGRect
     let multiRect: CGRect
@@ -42,19 +40,43 @@ class MainMenu: SKScene {
         
         let stretch = SKAction.scaleYTo(1.6, duration: 0.0)
         
-        let classicLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "CLASSIC MODE", 50, .Center, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "classicLabel", CGPoint(x: size.width/2, y: classicY-15), 2, 3)
+        let classicLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "CLASSIC MODE",
+            fontSize: 50,
+            horAlignMode: .Center, vertAlignMode: .Baseline,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            name: "classicLabel",
+            positon: CGPoint(x: size.width/2, y: classicY-15),
+            shadowZPos: 2, shadowOffset: 3)
         classicLabel[0].runAction(stretch)
         classicLabel[1].runAction(stretch)
         
-        let endlessLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "ENDLESS MODE", 50, .Center, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "endlessLabel", CGPoint(x: size.width/2, y: endlessY-15), 2, 3)
+        let endlessLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "ENDLESS MODE",
+            fontSize: 50,
+            horAlignMode: .Center, vertAlignMode: .Baseline,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            name: "endlessLabel",
+            positon: CGPoint(x: size.width/2, y: endlessY-15),
+            shadowZPos: 2, shadowOffset: 3)
         endlessLabel[0].runAction(stretch)
         endlessLabel[1].runAction(stretch)
         
-        let multiplayerLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "MULTIPLAYER MODE", 50, .Center, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "multiplayerLabel", CGPoint(x: size.width/2, y: multiY-15), 2, 3)
+        let multiplayerLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "MULTIPLAYER MODE",
+            fontSize: 50,
+            horAlignMode: .Center, vertAlignMode: .Baseline,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            name: "multiplayerLabel",
+            positon: CGPoint(x: size.width/2, y: multiY-15),
+            shadowZPos: 2, shadowOffset: 3)
         multiplayerLabel[0].runAction(stretch)
         multiplayerLabel[1].runAction(stretch)
         
-        let settingsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "SETTINGS", 50, .Center, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "settingsLabel", CGPoint(x: size.width/2, y: settingsY-15), 2, 3)
+        let settingsLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "SETTINGS",
+            fontSize: 50,
+            horAlignMode: .Center, vertAlignMode: .Baseline,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            name: "settingsLabel",
+            positon: CGPoint(x: size.width/2, y: settingsY-15),
+            shadowZPos: 2, shadowOffset: 3)
         settingsLabel[0].runAction(stretch)
         settingsLabel[1].runAction(stretch)
         
@@ -139,12 +161,16 @@ class MainMenu: SKScene {
         let shade = childNodeWithName("buttonDown")
         if (shade != nil) {
             shade!.removeFromParent()
-        
+            
+            var myScene: SKScene!
             if(classicRect.contains(touchLocation)) {
-                //transition to difficulty select scene
+                myScene = ClassicGameScene(size: self.size, difficulty: 0, joeys: 0, controls: Control.Thumb)
+                myScene.scaleMode = self.scaleMode
+                let reveal = SKTransition.flipHorizontalWithDuration(0.5)
+                self.view?.presentScene(myScene, transition: reveal)
             }
             else if(endlessRect.contains(touchLocation)) {
-                let myScene = GameScene(size: self.size, mode: GameMode.EndlessMode, difficulty: 0, joeys: 0, controls: Control.Thumb)
+                myScene = GameScene(size: self.size, difficulty: 0, joeys: 0, controls: Control.Thumb)
                 myScene.scaleMode = self.scaleMode
                 let reveal = SKTransition.flipHorizontalWithDuration(0.5)
                 self.view?.presentScene(myScene, transition: reveal)
