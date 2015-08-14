@@ -19,6 +19,8 @@ enum GameState {
     case GameOver
 }
 
+var gameControls: Control = .Thumb
+
 let allLines: [[Int]] = [ [1,0,0], [1,0,2], [1,2,0], [1,2,2],
     [0,1,0], [0,1,2], [2,1,0], [2,1,2],
     [0,0,1], [0,2,1], [2,0,1], [2,2,1],

@@ -94,7 +94,7 @@ class GameScene: SKScene {
         //debugDrawPlayableArea()
     }
     
-    init(size: CGSize, difficulty: Int, joeys: Int, controls: Control) {
+    init(size: CGSize, controls: Control) {
         let maxAspectRatio:CGFloat = 16.0/9.0
         let playableWidth = size.height / maxAspectRatio
         playableMargin = (size.width-playableWidth)/2.0
@@ -137,7 +137,7 @@ class GameScene: SKScene {
         if(controlSettings == .TwoThumbs) {
             kangSpeed = 0.1
         }
-        diffLevel = difficulty
+        diffLevel = V_EASY
         
         super.init(size: size)
         
@@ -613,7 +613,7 @@ class GameScene: SKScene {
             kangaroo.runAction(SKAction.moveToX(leftColX, duration: kangSpeed))
             kangPos = 1
         }
-        if rightTouch && (kangPos != 1) {
+        if rightTouch && (kangPos != 3) {
             kangaroo.runAction(SKAction.moveToX(rightColX, duration: kangSpeed))
             kangPos = 3
         }
@@ -712,7 +712,9 @@ class GameScene: SKScene {
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
-        trackThumb(touchLocation)
+        if(controlSettings == .Thumb) {
+            trackThumb(touchLocation)
+        }
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {

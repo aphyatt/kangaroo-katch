@@ -12,12 +12,16 @@ import SpriteKit
 class Settings: SKScene {
     let thumbButtonRect: CGRect
     let twoThumbsButtonRect: CGRect
+    let backButtonRect: CGRect
     
     let thumbButton = SKSpriteNode(imageNamed: "ButtonImage")
     let twoThumbsButton = SKSpriteNode(imageNamed: "ButtonImage")
-    let settingsTitleY: CGFloat = 900
+    let backButton = SKSpriteNode(imageNamed: "ButtonImage")
+    
+    let settingsTitleY: CGFloat = 890
     let controlLabelY: CGFloat = 770
     let controlButtonY: CGFloat = 450
+    let controlMessageY: CGFloat = 380
     let controlPicY: CGFloat = 620
     
     let thumbImage = SKSpriteNode(imageNamed: "OneThumb")
@@ -25,6 +29,9 @@ class Settings: SKScene {
     
     let oneThirdX: CGFloat
     let twoThirdX: CGFloat
+    let backButtonX: CGFloat = 190
+    let backButtonY: CGFloat = 970
+    
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.whiteColor()
@@ -79,6 +86,19 @@ class Settings: SKScene {
         addChild(twoThumbsLabel[0])
         addChild(twoThumbsLabel[1])
         
+        let backLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "BACK",
+            fontSize: 20,
+            horAlignMode: .Center, vertAlignMode: .Baseline,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            name: "backLabel",
+            positon: CGPoint(x: backButtonX, y: backButtonY-10),
+            shadowZPos: 2, shadowOffset: 2)
+        let backStretch = SKAction.scaleXTo(1.6, y: 1.6, duration: 0.0)
+        backLabel[0].runAction(backStretch)
+        backLabel[1].runAction(backStretch)
+        addChild(backLabel[0])
+        addChild(backLabel[1])
+        
         thumbImage.position = CGPoint(x: oneThirdX-20, y: controlPicY)
         twoThumbsImage.position = CGPoint(x: twoThirdX+20, y: controlPicY)
         thumbImage.setScale(0.7)
@@ -88,8 +108,9 @@ class Settings: SKScene {
         
         addChild(thumbButton)
         addChild(twoThumbsButton)
+        addChild(backButton)
         
-        debugDrawPlayableArea()
+        //debugDrawPlayableArea()
     }
     
     override init(size: CGSize) {
@@ -102,6 +123,7 @@ class Settings: SKScene {
         
         thumbButton.setScale(0.5)
         twoThumbsButton.setScale(0.5)
+        backButton.setScale(0.3)
         
         thumbButtonRect = CGRect(x: oneThirdX-25 - thumbButton.size.width/2,
             y: controlButtonY - thumbButton.size.height/2,
@@ -111,9 +133,14 @@ class Settings: SKScene {
             y: controlButtonY - thumbButton.size.height/2,
             width: thumbButton.size.width,
             height: thumbButton.size.height)
+        backButtonRect = CGRect(x: backButtonX - backButton.size.width/2,
+            y: backButtonY - backButton.size.height/2,
+            width: backButton.size.width,
+            height: backButton.size.height)
         
         thumbButton.position = CGPoint(x: oneThirdX-25, y: controlButtonY)
         twoThumbsButton.position = CGPoint(x: twoThirdX+25, y: controlButtonY)
+        backButton.position = CGPoint(x: backButtonX, y: backButtonY)
         
         super.init(size: size)
     }
@@ -122,24 +149,19 @@ class Settings: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /*
     func sceneTouched(touchLocation:CGPoint) {
         var shade: SKShapeNode!
         var buttonTouched: Bool = false
-        if(classicRect.contains(touchLocation)) {
-            shade = drawRectangle(classicRect, SKColor.grayColor(), 1.0)
+        if(thumbButtonRect.contains(touchLocation)) {
+            shade = drawRectangle(thumbButtonRect, SKColor.grayColor(), 1.0)
             buttonTouched = true
         }
-        else if(endlessRect.contains(touchLocation)) {
-            shade = drawRectangle(endlessRect, SKColor.grayColor(), 1.0)
+        else if(twoThumbsButtonRect.contains(touchLocation)) {
+            shade = drawRectangle(twoThumbsButtonRect, SKColor.grayColor(), 1.0)
             buttonTouched = true
         }
-        else if(multiRect.contains(touchLocation)) {
-            shade = drawRectangle(multiRect, SKColor.grayColor(), 1.0)
-            buttonTouched = true
-        }
-        else if(settingsRect.contains(touchLocation)) {
-            shade = drawRectangle(settingsRect, SKColor.grayColor(), 1.0)
+        else if(backButtonRect.contains(touchLocation)) {
+            shade = drawRectangle(backButtonRect, SKColor.grayColor(), 1.0)
             buttonTouched = true
         }
         
@@ -151,7 +173,6 @@ class Settings: SKScene {
             addChild(shade)
             buttonTouched = false
         }
-        
     }
     
     func sceneUntouched(touchLocation:CGPoint) {
@@ -160,24 +181,46 @@ class Settings: SKScene {
             shade!.removeFromParent()
             
             var myScene: SKScene!
-            if(classicRect.contains(touchLocation)) {
-                myScene = ClassicGameScene(size: self.size, difficulty: 0, joeys: 0, controls: Control.Thumb)
+            var controlChangeMessage: String!
+            var controlChange: Bool = false
+            if(thumbButtonRect.contains(touchLocation)) {
+                gameControls = .Thumb
+                controlChangeMessage = "Controls Changed: One Hand"
+                controlChange = true
+            }
+            else if(twoThumbsButtonRect.contains(touchLocation)) {
+                gameControls = .TwoThumbs
+                controlChangeMessage = "Controls Changed: Two Hands"
+                controlChange = true
+            }
+            else if(backButtonRect.contains(touchLocation)) {
+                myScene = MainMenu(size: self.size)
                 myScene.scaleMode = self.scaleMode
                 let reveal = SKTransition.flipHorizontalWithDuration(0.5)
                 self.view?.presentScene(myScene, transition: reveal)
             }
-            else if(endlessRect.contains(touchLocation)) {
-                myScene = GameScene(size: self.size, difficulty: 0, joeys: 0, controls: Control.Thumb)
-                myScene.scaleMode = self.scaleMode
-                let reveal = SKTransition.flipHorizontalWithDuration(0.5)
-                self.view?.presentScene(myScene, transition: reveal)
+            
+            if(controlChange) {
+                let controlChangeLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: controlChangeMessage,
+                    fontSize: 30,
+                    horAlignMode: .Center, vertAlignMode: .Baseline,
+                    labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+                    name: "controlChangeLabel",
+                    positon: CGPoint(x: size.width/2, y: controlMessageY),
+                    shadowZPos: 2, shadowOffset: 2)
+                addChild(controlChangeLabel[0])
+                addChild(controlChangeLabel[1])
+            
+                let wait = SKAction.waitForDuration(0.6)
+                let fade = SKAction.fadeAlphaTo(0.0, duration: 0.5)
+                let remove = SKAction.runBlock({
+                    controlChangeLabel[0].removeFromParent()
+                    controlChangeLabel[1].removeFromParent()})
+                let sequence = SKAction.sequence([wait, fade, remove])
+                controlChangeLabel[0].runAction(sequence)
+                controlChangeLabel[1].runAction(sequence)
             }
-            else if(multiRect.contains(touchLocation)) {
-                //multiplayer scene (?) good luck...
-            }
-            else if(settingsRect.contains(touchLocation)) {
-                //scene to choose sound options / controls (two hands or swiping)
-            }
+            
         }
     }
     
@@ -192,7 +235,6 @@ class Settings: SKScene {
         let touchLocation = touch.locationInNode(self)
         sceneUntouched(touchLocation)
     }
-    */
     
     func debugDrawPlayableArea() {
         let tShape = drawRectangle(thumbButtonRect, SKColor.redColor(), 4.0)
@@ -200,6 +242,9 @@ class Settings: SKScene {
         
         let ttShape = drawRectangle(twoThumbsButtonRect, SKColor.redColor(), 4.0)
         addChild(ttShape)
+        
+        let bShape = drawRectangle(backButtonRect, SKColor.redColor(), 4.0)
+        addChild(bShape)
         
     }
     
