@@ -146,7 +146,7 @@ func drawRectangle(rect: CGRect, color: UIColor, width: CGFloat) -> SKShapeNode 
 
 func createShadowLabel(font: String, text: String, fontSize: CGFloat, horAlignMode: SKLabelHorizontalAlignmentMode,
     vertAlignMode: SKLabelVerticalAlignmentMode, labelColor: UIColor, shadowColor: UIColor, name: String,
-    positon: CGPoint, shadowZPos: CGFloat) -> [SKLabelNode] {
+    positon: CGPoint, shadowZPos: CGFloat, shadowOffset: CGFloat) -> [SKLabelNode] {
         var labelArray: [SKLabelNode] = []
         
         let label = SKLabelNode(fontNamed: font)
@@ -166,7 +166,7 @@ func createShadowLabel(font: String, text: String, fontSize: CGFloat, horAlignMo
         labelS.horizontalAlignmentMode = horAlignMode
         labelS.verticalAlignmentMode = vertAlignMode
         labelS.fontColor = shadowColor
-        labelS.position = CGPoint(x: positon.x, y: positon.y-2)
+        labelS.position = CGPoint(x: positon.x+2, y: positon.y-shadowOffset)
         labelS.zPosition = shadowZPos
         labelS.name = name + "S"
         labelArray.append(labelS)

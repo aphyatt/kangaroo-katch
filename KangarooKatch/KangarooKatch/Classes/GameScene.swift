@@ -59,9 +59,9 @@ class GameScene: SKScene {
     var score: Int = 0
     var dropsLeft: Int = 10
     var livesLeft: Int = 3
-    let scoreLabelY: CGFloat = 125
-    let livesLabelY: CGFloat = 80
-    let dropsLabelY: CGFloat = 40
+    let scoreLabelY: CGFloat = 945
+    let livesLabelY: CGFloat = 100
+    let dropsLabelY: CGFloat = 50
     var livesDropsX: CGFloat = 165
     var joeyLifeStartX: CGFloat
     var boomerangLifeStartX: CGFloat
@@ -128,7 +128,7 @@ class GameScene: SKScene {
         rightColX = (size.width/2) + (dropletRect.width/3.5)
         
         joeyLifeStartX = livesDropsX + 130
-        boomerangLifeStartX = livesDropsX + 145
+        boomerangLifeStartX = livesDropsX + 175
         
         gameMode = mode
         controlSettings = controls
@@ -166,17 +166,17 @@ class GameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
-        var scoreSize: CGFloat
-        var scoreY: CGFloat
-        if (gameMode == GameMode.ClassicMode) {
+        var scoreY: CGFloat = 0
+        var scoreSize: CGFloat = 0
+        if (gameMode == .ClassicMode) {
             scoreSize = 60
             scoreY = scoreLabelY - 50
         }
-        else {
-            scoreSize = 40
+        if (gameMode == .EndlessMode) {
+            scoreSize = 70
             scoreY = scoreLabelY
         }
-        let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", scoreSize, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreY), 4)
+        let scoreLabelA: [SKLabelNode] = createShadowLabel("Soup of Justice", "Score: \(score)", scoreSize, horAlignModeDefault, .Baseline, SKColor.whiteColor(), SKColor.grayColor(), "scoreLabel", CGPoint(x: size.width/2, y: scoreY), 4, 4)
         scoreLabel = scoreLabelA[0]
         scoreLabelS = scoreLabelA[1]
         addChild(scoreLabel)
@@ -191,11 +191,11 @@ class GameScene: SKScene {
     func setupLives() {
         livesDropsX = 165 + playableMargin
         
-        let livesLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Lives: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "livesLabel", CGPoint(x: livesDropsX, y: livesLabelY), 4)
+        let livesLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Lives: ", 50, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "livesLabel", CGPoint(x: livesDropsX, y: livesLabelY), 4, 2)
         addChild(livesLabel[0])
         addChild(livesLabel[1])
         
-        let dropsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Drops: ", 40, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "dropsLabel", CGPoint(x: livesDropsX, y: dropsLabelY), 4)
+        let dropsLabel: [SKLabelNode] = createShadowLabel("Soup of Justice", "Drops: ", 50, .Right, vertAlignModeDefault, SKColor.blackColor(), SKColor.whiteColor(), "dropsLabel", CGPoint(x: livesDropsX, y: dropsLabelY), 4, 2)
         addChild(dropsLabel[0])
         addChild(dropsLabel[1])
         
@@ -203,14 +203,14 @@ class GameScene: SKScene {
             let node = SKSpriteNode(imageNamed: "Egg")
             let nodeS = SKSpriteNode(imageNamed: "Egg")
             
-            node.position.x = joeyLifeStartX + CGFloat(i)*35
+            node.position.x = joeyLifeStartX + CGFloat(i)*38
             node.position.y = dropsLabelY+12
-            node.setScale(0.05)
+            node.setScale(0.07)
             node.zPosition = 5
             node.name = "drop\(i+1)"
             
             nodeS.position = node.position
-            nodeS.setScale(0.05)
+            nodeS.setScale(0.07)
             nodeS.zPosition = 4
             nodeS.alpha = 0.5
             
@@ -222,14 +222,14 @@ class GameScene: SKScene {
             let node = SKSpriteNode(imageNamed: "Boomerang")
             let nodeS = SKSpriteNode(imageNamed: "Boomerang")
             
-            node.position.x = boomerangLifeStartX + CGFloat(i)*75
+            node.position.x = boomerangLifeStartX + CGFloat(i)*100
             node.position.y = livesLabelY+12
-            node.setScale(0.1)
+            node.setScale(0.15)
             node.zPosition = 5
             node.name = "life\(i+1)"
             
             nodeS.position = node.position
-            nodeS.setScale(0.1)
+            nodeS.setScale(0.12)
             nodeS.zPosition = 4
             nodeS.alpha = 0.5
             
@@ -346,7 +346,7 @@ class GameScene: SKScene {
     }
     
     func runGameOverAction() {
-        let gameOver = createShadowLabel("Soup of Justice", "GAME OVER", 70, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "gameOver", CGPoint(x: size.width/2, y: 780), 7)
+        let gameOver = createShadowLabel("Soup of Justice", "GAME OVER", 70, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "gameOver", CGPoint(x: size.width/2, y: 780), 7, 2)
         gameOver[0].alpha = 0.0
         gameOver[1].alpha = 0.0
         addChild(gameOver[0])
@@ -360,18 +360,18 @@ class GameScene: SKScene {
             SKAction.runBlock({gameOver[1].runAction(gameOverAction)})])
         runAction(GOgroup)
         
-        //have score rise and grow under GAME OVER
+        //have score move and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveByX(0.0, y: 580, duration: 1.0)
-        let grow = SKAction.scaleBy(1.5, duration: 1.0)
+        let rise = SKAction.moveByX(0, y: -250, duration: 1.0)
+        let grow = SKAction.scaleBy(1.3, duration: 1.0)
         let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
         runAction(scoreGroup)
         
         //tap anywhere to restart
-        let tapRestart = createShadowLabel("Soup of Justice", "TAP ANYWHERE TO RESTART", 20, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "tapRestartLabel", CGPoint(x: size.width/2, y: 650), 7)
+        let tapRestart = createShadowLabel("Soup of Justice", "TAP ANYWHERE TO RESTART", 20, horAlignModeDefault, .Baseline, SKColor.blackColor(), SKColor.whiteColor(), "tapRestartLabel", CGPoint(x: size.width/2, y: 650), 7, 2)
         tapRestart[0].alpha = 0.0
         tapRestart[1].alpha = 0.0
         addChild(tapRestart[0])
@@ -591,15 +591,15 @@ class GameScene: SKScene {
     * within the case statement
     **********************************************************************************************************/
     func updateKangaroo() {
-        if leftTouch {
+        if leftTouch && (kangPos != 1) {
             kangaroo.runAction(SKAction.moveToX(leftColX, duration: kangSpeed))
             kangPos = 1
         }
-        if rightTouch {
+        if rightTouch && (kangPos != 1) {
             kangaroo.runAction(SKAction.moveToX(rightColX, duration: kangSpeed))
             kangPos = 3
         }
-        if (!leftTouch && !rightTouch) || numFingers == 0 {
+        if ((!leftTouch && !rightTouch) || numFingers == 0) && (kangPos != 2) {
             kangaroo.runAction(SKAction.moveToX(midColX, duration: kangSpeed))
             kangPos = 2
         }
@@ -806,7 +806,7 @@ class GameScene: SKScene {
         scoreLabel.text = "Score: \(score)"
         scoreLabelS.text = "Score: \(score)"
         scoreLabel.position.x = size.width/2
-        scoreLabelS.position.x = size.width/2
+        scoreLabelS.position.x = (size.width/2) + 2
         
         let grow = SKAction.scaleBy(1.2, duration: 0.1)
         let shrink = grow.reversedAction()
@@ -857,6 +857,7 @@ class GameScene: SKScene {
         let shakeRight = SKAction.moveByX(20.0, y: 0.0, duration: 0.1)
         let shakeOff = SKAction.sequence([shakeLeft, shakeRight, shakeLeft])
         kangaroo.runAction(shakeOff)
+        println("shake")
         
         boomer.removeAllActions()
         boomer.runAction(SKAction.removeFromParent())
