@@ -211,7 +211,7 @@ class Settings: SKScene {
                 addChild(controlChangeLabel[0])
                 addChild(controlChangeLabel[1])
             
-                let wait = SKAction.waitForDuration(0.6)
+                let wait = SKAction.waitForDuration(0.8)
                 let fade = SKAction.fadeAlphaTo(0.0, duration: 0.5)
                 let remove = SKAction.runBlock({
                     controlChangeLabel[0].removeFromParent()
