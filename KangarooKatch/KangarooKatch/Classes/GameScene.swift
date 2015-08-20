@@ -58,10 +58,10 @@ class GameScene: SKScene {
     var score: Int = 0
     var dropsLeft: Int = 10
     var livesLeft: Int = 3
-    let scoreLabelY: CGFloat = 945
-    let livesLabelY: CGFloat = 100
-    let dropsLabelY: CGFloat = 50
-    var livesDropsX: CGFloat = 165
+    let scoreLabelX: CGFloat
+    let scoreLabelY: CGFloat = 962
+    let livesLabelY: CGFloat = 982
+    let dropsLabelY: CGFloat = 942
     var joeyLifeStartX: CGFloat
     var boomerangLifeStartX: CGFloat
     var scoreLabel : SKLabelNode!
@@ -122,12 +122,14 @@ class GameScene: SKScene {
         oneThirdX = playableMargin + (playableWidth/3)
         twoThirdX = playableMargin + (playableWidth*(2/3))
         
+        scoreLabelX = oneThirdX - 160
+        
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
         rightColX = (size.width/2) + (dropletRect.width/3.5)
         
-        joeyLifeStartX = livesDropsX + 130
-        boomerangLifeStartX = livesDropsX + 175
+        joeyLifeStartX = size.width/2 + 93
+        boomerangLifeStartX = size.width/2 + 115
   
         controlSettings = controls
         kangSpeed = 0.1
@@ -165,43 +167,49 @@ class GameScene: SKScene {
         var scoreY: CGFloat = 0
         var scoreSize: CGFloat = 0
      
-        scoreSize = 70
+        scoreSize = 50
         scoreY = scoreLabelY
    
         let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(score)",
             fontSize: scoreSize,
-            horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
+            horAlignMode: .Left, vertAlignMode: .Center,
             labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
             name: "scoreLabel",
-            positon: CGPoint(x: size.width/2, y: scoreY),
+            positon: CGPoint(x: scoreLabelX, y: scoreY),
             shadowZPos: 4, shadowOffset: 4)
         scoreLabel = scoreLabelA[0]
         scoreLabelS = scoreLabelA[1]
+        scoreLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        scoreLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
         addChild(scoreLabel)
         addChild(scoreLabelS)
         
     }
     
     func setupLives() {
-        livesDropsX = 165 + playableMargin
+        var livesDropsX: CGFloat = twoThirdX - 25
         
         let livesLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Lives: ",
-            fontSize: 50,
-            horAlignMode: .Right, vertAlignMode: vertAlignModeDefault,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            fontSize: 35,
+            horAlignMode: .Right, vertAlignMode: .Center,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
             name: "livesLabel",
             positon: CGPoint(x: livesDropsX, y: livesLabelY),
             shadowZPos: 4, shadowOffset: 2)
+        livesLabel[0].runAction(SKAction.scaleYTo(1.2, duration: 0.0))
+        livesLabel[1].runAction(SKAction.scaleYTo(1.2, duration: 0.0))
         addChild(livesLabel[0])
         addChild(livesLabel[1])
         
         let dropsLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Drops: ",
-            fontSize: 50,
-            horAlignMode: .Right, vertAlignMode: vertAlignModeDefault,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
+            fontSize: 35,
+            horAlignMode: .Right, vertAlignMode: .Center,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
             name: "dropsLabel",
             positon: CGPoint(x: livesDropsX, y: dropsLabelY),
             shadowZPos: 4, shadowOffset: 2)
+        dropsLabel[0].runAction(SKAction.scaleYTo(1.2, duration: 0.0))
+        dropsLabel[1].runAction(SKAction.scaleYTo(1.2, duration: 0.0))
         addChild(dropsLabel[0])
         addChild(dropsLabel[1])
         
@@ -209,14 +217,14 @@ class GameScene: SKScene {
             let node = SKSpriteNode(imageNamed: "Egg")
             let nodeS = SKSpriteNode(imageNamed: "Egg")
             
-            node.position.x = joeyLifeStartX + CGFloat(i)*38
-            node.position.y = dropsLabelY+12
-            node.setScale(0.07)
+            node.position.x = joeyLifeStartX + CGFloat(i)*20
+            node.position.y = dropsLabelY
+            node.setScale(0.04)
             node.zPosition = 5
             node.name = "drop\(i+1)"
             
             nodeS.position = node.position
-            nodeS.setScale(0.07)
+            nodeS.setScale(0.04)
             nodeS.zPosition = 4
             nodeS.alpha = 0.5
             
@@ -228,14 +236,14 @@ class GameScene: SKScene {
             let node = SKSpriteNode(imageNamed: "Boomerang")
             let nodeS = SKSpriteNode(imageNamed: "Boomerang")
             
-            node.position.x = boomerangLifeStartX + CGFloat(i)*100
-            node.position.y = livesLabelY+12
-            node.setScale(0.15)
+            node.position.x = boomerangLifeStartX + CGFloat(i)*60
+            node.position.y = livesLabelY
+            node.setScale(0.10)
             node.zPosition = 5
             node.name = "life\(i+1)"
             
             nodeS.position = node.position
-            nodeS.setScale(0.12)
+            nodeS.setScale(0.10)
             nodeS.zPosition = 4
             nodeS.alpha = 0.5
             
@@ -825,12 +833,18 @@ class GameScene: SKScene {
         score++
         scoreLabel.text = "Score: \(score)"
         scoreLabelS.text = "Score: \(score)"
-        scoreLabel.position.x = size.width/2
-        scoreLabelS.position.x = (size.width/2) + 2
         
-        let grow = SKAction.scaleBy(1.2, duration: 0.1)
+        var adjustX: CGFloat = 0
+        if score >= 10 { adjustX = 10 }
+        if score >= 100 { adjustX = 20 }
+        
+        let grow = SKAction.scaleBy(1.05, duration: 0.15)
+        let adjust = SKAction.runBlock({
+            self.scoreLabel.position.x = self.scoreLabelX - adjustX
+            self.scoreLabelS.position.x = self.scoreLabelX + 2 - adjustX
+        })
         let shrink = grow.reversedAction()
-        let scoreAction = SKAction.sequence([grow, shrink])
+        let scoreAction = SKAction.sequence([grow, adjust, shrink])
         
         let groupScore = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
