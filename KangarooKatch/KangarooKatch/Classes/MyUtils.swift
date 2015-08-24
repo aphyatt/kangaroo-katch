@@ -144,6 +144,27 @@ func drawRectangle(rect: CGRect, color: UIColor, width: CGFloat) -> SKShapeNode 
     return shape
 }
 
+func getRoundedRectShape(#rect: CGRect, #cornerRadius: CGFloat, #color: UIColor, #lineWidth: CGFloat) -> SKShapeNode {
+    let p: CGMutablePathRef = CGPathCreateMutable()
+    
+    CGPathMoveToPoint(p, nil, rect.origin.x + cornerRadius, rect.origin.y)
+    
+    let maxX: CGFloat = CGRectGetMaxX(rect)
+    let maxY: CGFloat = CGRectGetMaxY(rect)
+    
+    CGPathAddArcToPoint(p, nil, maxX, rect.origin.y, maxX, rect.origin.y + cornerRadius, cornerRadius)
+    CGPathAddArcToPoint(p, nil, maxX, maxY, maxX - cornerRadius, maxY, cornerRadius)
+    
+    CGPathAddArcToPoint(p, nil, rect.origin.x, maxY, rect.origin.x, maxY - cornerRadius, cornerRadius ) ;
+    CGPathAddArcToPoint(p, nil, rect.origin.x, rect.origin.y, rect.origin.x + cornerRadius, rect.origin.y, cornerRadius)
+    
+    let shape = SKShapeNode()
+    shape.path = p
+    shape.strokeColor = color
+    shape.lineWidth = lineWidth
+    return shape
+}
+
 func createShadowLabel(#font: String, #text: String, #fontSize: CGFloat, #horAlignMode: SKLabelHorizontalAlignmentMode,
     #vertAlignMode: SKLabelVerticalAlignmentMode, #labelColor: UIColor, #shadowColor: UIColor, #name: String,
     #positon: CGPoint, #shadowZPos: CGFloat, #shadowOffset: CGFloat) -> [SKLabelNode] {

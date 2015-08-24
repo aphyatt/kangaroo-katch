@@ -28,8 +28,8 @@ class GameScene: SKScene {
     let horAlignModeDefault: SKLabelHorizontalAlignmentMode = .Center
     let vertAlignModeDefault: SKLabelVerticalAlignmentMode = .Baseline
     
-    let dropletCatchBoundaryY: CGFloat = 330
-    let dropletFadeBoundaryY: CGFloat = 100
+    let dropletCatchBoundaryY: CGFloat = 175
+    let dropletFadeBoundaryY: CGFloat = 65
     var leftColX: CGFloat
     var midColX: CGFloat
     var rightColX: CGFloat
@@ -91,7 +91,7 @@ class GameScene: SKScene {
     /************************************ Init/Update Functions ***************************************/
     
     override func didMoveToView(view: SKView) {
-        //debugDrawPlayableArea()
+        debugDrawPlayableArea()
     }
     
     init(size: CGSize, controls: Control) {
@@ -144,7 +144,7 @@ class GameScene: SKScene {
         super.init(size: size)
         
         setupScene()
-        setupLives()
+        setupHUD()
         
     }
     
@@ -164,12 +164,22 @@ class GameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
+    }
+    
+    func setupHUD() {
+        var HUDheight: CGFloat = 120
+        let HUDrect = CGRect(x: 0, y: size.height - HUDheight, width: size.width, height: HUDheight)
+        var HUDshape = drawRectangle(HUDrect, SKColor.blackColor(), 1.0)
+        HUDshape.fillColor = SKColor.blackColor()
+        HUDshape.zPosition = 2
+        addChild(HUDshape)
+        
         var scoreY: CGFloat = 0
         var scoreSize: CGFloat = 0
-     
+        
         scoreSize = 50
         scoreY = scoreLabelY
-   
+        
         let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(score)",
             fontSize: scoreSize,
             horAlignMode: .Left, vertAlignMode: .Center,
@@ -184,9 +194,6 @@ class GameScene: SKScene {
         addChild(scoreLabel)
         addChild(scoreLabelS)
         
-    }
-    
-    func setupLives() {
         var livesDropsX: CGFloat = twoThirdX - 25
         
         let livesLabel: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Lives: ",
@@ -312,7 +319,7 @@ class GameScene: SKScene {
         diffLevel = 0
         setupScene()
         //add score, drops and lives labels
-        setupLives()
+        setupHUD()
         //set difficulty, speeds, ect.
         timeBetweenLines = 0.5
         totalLinesDropped = 0
@@ -380,12 +387,19 @@ class GameScene: SKScene {
             SKAction.runBlock({gameOver[1].runAction(gameOverAction)})])
         runAction(GOgroup)
         
+        var scoreMoveLocX: CGFloat = 130
+        if score < 10 {
+            scoreMoveLocX += 20
+        }
+        else if score < 100 {
+            scoreMoveLocX += 10
+        }
         //have score move and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveByX(0, y: -250, duration: 1.0)
+        let moveIntoPos = SKAction.moveByX(scoreMoveLocX, y: -240, duration: 1.0)
         let grow = SKAction.scaleBy(1.3, duration: 1.0)
-        let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
+        let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([moveIntoPos, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
         runAction(scoreGroup)
@@ -493,7 +507,7 @@ class GameScene: SKScene {
         let waitBeforeGroup = totalLinesDropped == 0 ?
             0.0 : NSTimeInterval(CGFloat.random(min: groupWaitTimeMin, max: groupWaitTimeMax))
         
-        let groupSequence = SKAction.sequence([SKAction.runBlock(dropRandomLine), SKAction.waitForDuration(timeBetweenLines)])
+        let groupSequence = SKAction.sequence([SKAction.runBlock({self.dropRandomLine()}), SKAction.waitForDuration(timeBetweenLines)])
         let groupAction = SKAction.repeatAction(groupSequence, count: linesToDrop)
         let finalAction = SKAction.sequence([SKAction.waitForDuration(waitBeforeGroup), groupAction])
         
@@ -571,7 +585,7 @@ class GameScene: SKScene {
         }
         
         if somethingDropped {
-            droplet.zPosition = 2
+            droplet.zPosition = 3
             var dropletPosX: CGFloat = rightColX
             if(col == 1) {
                 dropletPosX = leftColX
@@ -858,13 +872,6 @@ class GameScene: SKScene {
         //make fade rect like catchzone, in checkcollision if missed hits fadezone, then stop and fade
         let fade = SKAction.fadeAlphaTo(0.3, duration: 0.1)
         joey.runAction(fade)
-        
-        let dropLife = childNodeWithName("drop\(dropsLeft)")
-        dropLife!.removeFromParent()
-        dropsLeft--
-        if(dropsLeft == 0) {
-            gameState = .GameOver
-        }
 
     }
     
@@ -874,13 +881,17 @@ class GameScene: SKScene {
         joey.physicsBody = nil
         joey.zRotation = 0
         joey.alpha = 0.3
+        joey.position.y = dropletFadeBoundaryY
         //change joey to have frown?
         addChild(joey)
         
-        let fade = SKAction.fadeAlphaTo(0.0, duration: 0.5)
-        let remove = SKAction.runBlock({joey.removeFromParent()})
-        let sequence = SKAction.sequence([fade, remove])
-        joey.runAction(sequence)
+        let dropLife = childNodeWithName("drop\(dropsLeft)")
+        dropLife!.removeFromParent()
+        dropsLeft--
+        if(dropsLeft == 0) {
+            gameState = .GameOver
+        }
+        
     }
     
     func kangarooCaughtBoomer(boomer: SKSpriteNode) {
@@ -890,6 +901,7 @@ class GameScene: SKScene {
         let shakeLeft = SKAction.moveByX(-10.0, y: 0.0, duration: 0.05)
         let shakeRight = SKAction.moveByX(20.0, y: 0.0, duration: 0.1)
         let shakeOff = SKAction.sequence([shakeLeft, shakeRight, shakeLeft])
+        //turn shake off into screen shake
         kangaroo.runAction(shakeOff)
         println("shake")
         
@@ -928,12 +940,18 @@ class GameScene: SKScene {
         //let rightSide = drawRectangle(rightRect, SKColor.redColor(), 10.0)
         //addChild(rightSide)
         
-        /*let catchZone = drawRectangle(catchZoneRect, SKColor.blueColor(), 6.0)
+        let catchZone = drawRectangle(catchZoneRect, SKColor.blueColor(), 6.0)
         catchZone.zPosition = 2
-        addChild(catchZone)*/
+        addChild(catchZone)
         
-        //let fadeZone = drawRectangle(fadeZoneRect, SKColor.whiteColor(), 6.0)
-        //addChild(fadeZone)
+        let fadeZone = drawRectangle(fadeZoneRect, SKColor.whiteColor(), 6.0)
+        fadeZone.zPosition = 2
+        addChild(fadeZone)
+        
+        let testRect = CGRect(x: 300, y: 300, width: 300, height: 300)
+        let test = getRoundedRectShape(rect: testRect, cornerRadius: 16, color: SKColor.blackColor(), lineWidth: 5)
+        test.zPosition = 10
+        addChild(test)
         
         
     }
