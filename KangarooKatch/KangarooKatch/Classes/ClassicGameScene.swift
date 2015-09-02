@@ -28,8 +28,8 @@ class ClassicGameScene: SKScene {
     let horAlignModeDefault: SKLabelHorizontalAlignmentMode = .Center
     let vertAlignModeDefault: SKLabelVerticalAlignmentMode = .Baseline
     
-    let dropletCatchBoundaryY: CGFloat = 330
-    let dropletFadeBoundaryY: CGFloat = 100
+    let dropletCatchBoundaryY: CGFloat = 175
+    let dropletFadeBoundaryY: CGFloat = 65
     var leftColX: CGFloat
     var midColX: CGFloat
     var rightColX: CGFloat
@@ -56,16 +56,16 @@ class ClassicGameScene: SKScene {
     
     //Score and Lives
     var score: Int = 0
+    var joeyCount: Int
     var dropsLeft: Int = 10
     var livesLeft: Int = 3
-    let scoreLabelY: CGFloat = 945
-    let livesLabelY: CGFloat = 100
-    let dropsLabelY: CGFloat = 50
-    var livesDropsX: CGFloat = 165
-    var joeyLifeStartX: CGFloat
-    var boomerangLifeStartX: CGFloat
+    let scoreLabelX: CGFloat
+    let joeyCountX: CGFloat
+    let scoreLabelY: CGFloat = 959
     var scoreLabel : SKLabelNode!
     var scoreLabelS : SKLabelNode!
+    var joeyCountLabel : SKLabelNode!
+    var joeyCountLabelS : SKLabelNode!
     
     //Gameover vars
     var restartTap: Bool = false
@@ -122,12 +122,12 @@ class ClassicGameScene: SKScene {
         oneThirdX = playableMargin + (playableWidth/3)
         twoThirdX = playableMargin + (playableWidth*(2/3))
         
+        scoreLabelX = oneThirdX - 160
+        joeyCountX = size.width/2 + 20
+        
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
         rightColX = (size.width/2) + (dropletRect.width/3.5)
-        
-        joeyLifeStartX = livesDropsX + 130
-        boomerangLifeStartX = livesDropsX + 175
         
         controlSettings = controls
         kangSpeed = 0.1
@@ -139,9 +139,12 @@ class ClassicGameScene: SKScene {
         }
         diffLevel = difficulty
         
+        joeyCount = 100 //CHANGE TO JOEYS
+        
         super.init(size: size)
         
         setupScene()
+        setupHUD()
         
     }
     
@@ -161,26 +164,49 @@ class ClassicGameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
+    }
+    
+    func setupHUD() {
+        var HUDheight: CGFloat = 120
+        let HUDrect = CGRect(x: 0, y: size.height - HUDheight, width: size.width, height: HUDheight)
+        var HUDshape = drawRectangle(HUDrect, SKColor.blackColor(), 1.0)
+        HUDshape.fillColor = SKColor.blackColor()
+        HUDshape.zPosition = 2
+        addChild(HUDshape)
+        
         var scoreY: CGFloat = 0
         var scoreSize: CGFloat = 0
-     
-        scoreSize = 60
-        scoreY = scoreLabelY - 50
-       
+        
+        scoreSize = 57
+        scoreY = scoreLabelY
+        
         let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(score)",
             fontSize: scoreSize,
-            horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
+            horAlignMode: .Left, vertAlignMode: .Center,
             labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
             name: "scoreLabel",
-            positon: CGPoint(x: size.width/2, y: scoreY),
+            positon: CGPoint(x: scoreLabelX, y: scoreY),
             shadowZPos: 4, shadowOffset: 4)
         scoreLabel = scoreLabelA[0]
         scoreLabelS = scoreLabelA[1]
+        scoreLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        scoreLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
         addChild(scoreLabel)
         addChild(scoreLabelS)
         
-        //add countDown egg label
-        
+        let countLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Joeys: \(joeyCount)",
+            fontSize: scoreSize,
+            horAlignMode: .Left, vertAlignMode: .Center,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
+            name: "joeyLabel",
+            positon: CGPoint(x: joeyCountX, y: scoreY),
+            shadowZPos: 4, shadowOffset: 4)
+        joeyCountLabel = countLabelA[0]
+        joeyCountLabelS = countLabelA[1]
+        joeyCountLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        joeyCountLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        addChild(joeyCountLabel)
+        addChild(joeyCountLabelS)
     }
     
     /*********************************************************************************************************
@@ -309,12 +335,19 @@ class ClassicGameScene: SKScene {
             SKAction.runBlock({gameOver[1].runAction(gameOverAction)})])
         runAction(GOgroup)
         
+        var scoreMoveLocX: CGFloat = 130
+        if score < 10 {
+            scoreMoveLocX += 20
+        }
+        else if score < 100 {
+            scoreMoveLocX += 10
+        }
         //have score move and grow under GAME OVER
         let wait2 = SKAction.waitForDuration(3.0)
         let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let rise = SKAction.moveByX(0, y: -250, duration: 1.0)
+        let moveIntoPos = SKAction.moveByX(scoreMoveLocX, y: -240, duration: 1.0)
         let grow = SKAction.scaleBy(1.3, duration: 1.0)
-        let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([rise, grow])])
+        let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([moveIntoPos, grow])])
         let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
         runAction(scoreGroup)
@@ -422,7 +455,7 @@ class ClassicGameScene: SKScene {
         let waitBeforeGroup = totalLinesDropped == 0 ?
             0.0 : NSTimeInterval(CGFloat.random(min: groupWaitTimeMin, max: groupWaitTimeMax))
         
-        let groupSequence = SKAction.sequence([SKAction.runBlock(dropRandomLine), SKAction.waitForDuration(timeBetweenLines)])
+        let groupSequence = SKAction.sequence([SKAction.runBlock({self.dropRandomLine()}), SKAction.runBlock({self.changeJoeyCount()}), SKAction.waitForDuration(timeBetweenLines)])
         let groupAction = SKAction.repeatAction(groupSequence, count: linesToDrop)
         let finalAction = SKAction.sequence([SKAction.waitForDuration(waitBeforeGroup), groupAction])
         
@@ -432,6 +465,29 @@ class ClassicGameScene: SKScene {
         
         //println("Droping group size: \(linesToDrop), waitBeforeGroup: \(waitBeforeGroup)")
         runAction(finalAction)
+    }
+    
+    //CHANGE - subtract only if joey is dropped
+    func changeJoeyCount() {
+        joeyCount--
+        joeyCountLabel.text = "Joeys: \(joeyCount)"
+        joeyCountLabelS.text = "Joeys: \(joeyCount)"
+        
+        var adjustX: CGFloat = 20
+        if joeyCount >= 100 { adjustX = 0 }
+        if score >= 10 { adjustX = 10 }
+        
+        let grow = SKAction.scaleBy(1.05, duration: 0.15)
+        let adjust = SKAction.runBlock({
+            self.joeyCountLabel.position.x = self.joeyCountX - adjustX
+            self.joeyCountLabelS.position.x = self.joeyCountX + 2 - adjustX
+        })
+        let shrink = grow.reversedAction()
+        let scoreAction = SKAction.sequence([grow, adjust, shrink])
+        
+        let groupScore = SKAction.group([SKAction.runBlock({self.joeyCountLabel.runAction(scoreAction)}),
+            SKAction.runBlock({self.joeyCountLabelS.runAction(scoreAction)})])
+        runAction(groupScore)
     }
     
     /*********************** Drop Group Helper Functions ******************************/
@@ -500,7 +556,7 @@ class ClassicGameScene: SKScene {
         }
         
         if somethingDropped {
-            droplet.zPosition = 2
+            droplet.zPosition = 3
             var dropletPosX: CGFloat = rightColX
             if(col == 1) {
                 dropletPosX = leftColX
@@ -760,12 +816,18 @@ class ClassicGameScene: SKScene {
         score++
         scoreLabel.text = "Score: \(score)"
         scoreLabelS.text = "Score: \(score)"
-        scoreLabel.position.x = size.width/2
-        scoreLabelS.position.x = (size.width/2) + 2
         
-        let grow = SKAction.scaleBy(1.2, duration: 0.1)
+        var adjustX: CGFloat = 0
+        if score >= 10 { adjustX = 10 }
+        if score >= 100 { adjustX = 20 }
+        
+        let grow = SKAction.scaleBy(1.05, duration: 0.15)
+        let adjust = SKAction.runBlock({
+            self.scoreLabel.position.x = self.scoreLabelX - adjustX
+            self.scoreLabelS.position.x = self.scoreLabelX + 2 - adjustX
+        })
         let shrink = grow.reversedAction()
-        let scoreAction = SKAction.sequence([grow, shrink])
+        let scoreAction = SKAction.sequence([grow, adjust, shrink])
         
         let groupScore = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
@@ -780,13 +842,6 @@ class ClassicGameScene: SKScene {
         let fade = SKAction.fadeAlphaTo(0.3, duration: 0.1)
         joey.runAction(fade)
         
-        let dropLife = childNodeWithName("drop\(dropsLeft)")
-        dropLife!.removeFromParent()
-        dropsLeft--
-        if(dropsLeft == 0) {
-            gameState = .GameOver
-        }
-        
     }
     
     func stopAndFadeJoey(joey: SKSpriteNode) {
@@ -795,13 +850,12 @@ class ClassicGameScene: SKScene {
         joey.physicsBody = nil
         joey.zRotation = 0
         joey.alpha = 0.3
+        joey.position.y = dropletFadeBoundaryY
         //change joey to have frown?
         addChild(joey)
         
-        let fade = SKAction.fadeAlphaTo(0.0, duration: 0.5)
-        let remove = SKAction.runBlock({joey.removeFromParent()})
-        let sequence = SKAction.sequence([fade, remove])
-        joey.runAction(sequence)
+        //keep track of missed eggs
+        
     }
     
     func kangarooCaughtBoomer(boomer: SKSpriteNode) {
@@ -817,12 +871,7 @@ class ClassicGameScene: SKScene {
         boomer.removeAllActions()
         boomer.runAction(SKAction.removeFromParent())
         
-        let life = childNodeWithName("life\(livesLeft)")
-        life!.removeFromParent()
-        livesLeft--
-        if(livesLeft == 0) {
-            gameState = .GameOver
-        }
+        //remove two eggs?
         
     }
     
@@ -855,6 +904,11 @@ class ClassicGameScene: SKScene {
         
         //let fadeZone = drawRectangle(fadeZoneRect, SKColor.whiteColor(), 6.0)
         //addChild(fadeZone)
+        
+        /*let testRect = CGRect(x: 300, y: 300, width: 300, height: 300)
+        let test = getRoundedRectShape(rect: testRect, cornerRadius: 16, color: SKColor.blackColor(), lineWidth: 5)
+        test.zPosition = 10
+        addChild(test)*/
         
         
     }
