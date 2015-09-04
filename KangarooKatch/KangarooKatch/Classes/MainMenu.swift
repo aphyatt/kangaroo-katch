@@ -164,7 +164,7 @@ class MainMenu: SKScene {
             
             var myScene: SKScene!
             if(classicRect.contains(touchLocation)) {
-                myScene = ClassicGameScene(size: self.size, difficulty: 0, joeys: 0, controls: gameControls)
+                myScene = ClassicGameScene(size: self.size, difficulty: 3, joeys: 100, controls: gameControls)
                 myScene.scaleMode = self.scaleMode
                 let reveal = SKTransition.flipHorizontalWithDuration(0.5)
                 self.view?.presentScene(myScene, transition: reveal)

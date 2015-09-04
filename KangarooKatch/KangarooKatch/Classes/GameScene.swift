@@ -442,6 +442,10 @@ class GameScene: SKScene {
             groupAmtMax = (groupAmtMin*2 - 1)
             diffLevel++
         }
+        else {
+            groupAmtMin = (groupAmtMin*2 - 1)
+            groupAmtMax = (groupAmtMin*2 - 1)
+        }
         
         switch diffLevel {
         case V_EASY: eggPercentage = 100
@@ -469,9 +473,7 @@ class GameScene: SKScene {
     */
     var timesthisFuncCalled: Int = 0
     var repeat: Int = 10
-    func getNewGroupAmount() -> Int {
-        if totalLinesDropped == 0 { return 1 }
-        
+    func checkUpdateDifficulty() {
         if timesthisFuncCalled == repeat {
             timesthisFuncCalled = 0
             switch diffLevel {
@@ -491,8 +493,6 @@ class GameScene: SKScene {
         }
         timesthisFuncCalled++
         
-        return randomInt(groupAmtMin, groupAmtMax)
-        
     }
     
     /**********************************************************************************************************
@@ -503,7 +503,8 @@ class GameScene: SKScene {
     ***********************************************************************************************************/
     func dropNewGroup() {
         //if true, drop a new group of lines
-        let linesToDrop = getNewGroupAmount()
+        checkUpdateDifficulty()
+        let linesToDrop = totalLinesDropped == 0 ? 1 : randomInt(groupAmtMin, groupAmtMax)
         let waitBeforeGroup = totalLinesDropped == 0 ?
             0.0 : NSTimeInterval(CGFloat.random(min: groupWaitTimeMin, max: groupWaitTimeMax))
         

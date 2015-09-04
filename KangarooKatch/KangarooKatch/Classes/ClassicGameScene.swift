@@ -57,8 +57,6 @@ class ClassicGameScene: SKScene {
     //Score and Lives
     var score: Int = 0
     var joeyCount: Int
-    var dropsLeft: Int = 10
-    var livesLeft: Int = 3
     let scoreLabelX: CGFloat
     let joeyCountX: CGFloat
     let scoreLabelY: CGFloat = 959
@@ -74,8 +72,7 @@ class ClassicGameScene: SKScene {
     let gameOverLabelS = SKLabelNode(fontNamed: "Soup of Justice")
     
     //Difficulty variables
-    var diffLevel: Int
-    var changeDiff: Bool = false
+    let diffLevel: Int
     let V_EASY = 0
     let EASY = 1
     let MED = 2
@@ -137,9 +134,10 @@ class ClassicGameScene: SKScene {
         if(controlSettings == .TwoThumbs) {
             kangSpeed = 0.1
         }
+        
         diffLevel = difficulty
         
-        joeyCount = 100 //CHANGE TO JOEYS
+        joeyCount = joeys
         
         super.init(size: size)
         
@@ -150,6 +148,53 @@ class ClassicGameScene: SKScene {
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setDifficulty(diff: Int) {
+        switch diff {
+        case V_EASY:
+            timeBetweenLines = 0.5
+            scene?.physicsWorld.gravity.dy = -7.8
+            groupWaitTimeMax = 3
+            groupWaitTimeMin = 2
+            eggPercentage = 100
+            break
+        case EASY:
+            timeBetweenLines = 0.46
+            scene?.physicsWorld.gravity.dy = -9.0
+            groupWaitTimeMax = 2.8
+            groupWaitTimeMin = 1.8
+            eggPercentage = 70
+            break
+        case MED:
+            timeBetweenLines = 0.42
+            scene?.physicsWorld.gravity.dy = -10.2
+            groupWaitTimeMax = 2.6
+            groupWaitTimeMin = 1.6
+            eggPercentage = 70
+            break
+        case HARD:
+            timeBetweenLines = 0.38
+            scene?.physicsWorld.gravity.dy = -11.4
+            groupWaitTimeMax = 2.4
+            groupWaitTimeMin = 1.4
+            eggPercentage = 75
+            break
+        case V_HARD:
+            timeBetweenLines = 0.34
+            scene?.physicsWorld.gravity.dy = -12.6
+            groupWaitTimeMax = 2.2
+            groupWaitTimeMin = 1.2
+            eggPercentage = 90
+            break
+        default:
+            timeBetweenLines = 0.3
+            scene?.physicsWorld.gravity.dy = -13.8
+            groupWaitTimeMax = 2
+            groupWaitTimeMin = 1
+            eggPercentage = 90
+            break
+        }
     }
     
     func setupScene() {
@@ -164,6 +209,7 @@ class ClassicGameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
+        setDifficulty(diffLevel)
     }
     
     func setupHUD() {
@@ -217,10 +263,6 @@ class ClassicGameScene: SKScene {
         
         switch gameState {
         case .GameRunning:
-            if (changeDiff) {
-                updateDifficulty()
-            }
-            
             if (totalLinesDropped - lineCountBeforeDrops) == currLinesToDrop {
                 dropNewGroup()
             }
@@ -266,8 +308,9 @@ class ClassicGameScene: SKScene {
         removeAllChildren()
         //add background and kangaroo
         score = 0
-        diffLevel = 0
+        setDifficulty(diffLevel)
         setupScene()
+        setupHUD()
         //set difficulty, speeds, ect.
         timeBetweenLines = 0.5
         totalLinesDropped = 0
@@ -278,8 +321,6 @@ class ClassicGameScene: SKScene {
         groupWaitTimeMax = 3.0
         groupAmtMin = 2
         groupAmtMax = 3
-        dropsLeft = 10
-        livesLeft = 3
         kangPos = 2
         timesthisFuncCalled = 0
         scene?.physicsWorld.gravity = CGVector(dx: 0, dy: -7.8)
@@ -376,70 +417,43 @@ class ClassicGameScene: SKScene {
     }
     
     /*********************************************************************************************************
-    * UPDATE DIFFICULTY
+    * UPDATE GROUP AMOUNT
     * Based on algorithm in getNewGroupAmount, calls this function
     * to adjust speeds and difficult level
     *********************************************************************************************************/
-    func updateDifficulty() {
-        if diffLevel < EXTREME {
-            timeBetweenLines -= 0.04
-            scene?.physicsWorld.gravity.dy -= 1.2
-            groupWaitTimeMax -= 0.2
-            groupWaitTimeMin -= 0.2
-            groupAmtMin = (groupAmtMin*2 - 1)
-            groupAmtMax = (groupAmtMin*2 - 1)
-            diffLevel++
-        }
-        
-        switch diffLevel {
-        case V_EASY: eggPercentage = 100
-            break
-        case EASY: eggPercentage = 70
-            break
-        case MED: eggPercentage = 70
-            break
-        case HARD: eggPercentage = 75
-            break
-        case V_HARD: eggPercentage = 90
-            break
-        default: eggPercentage = 90
-            break
-        }
-        
-        println("Diff Changed To: \(diffLevel)")
-        changeDiff = false
-    }
     
-    /*********************** Difficulty Helper Functions ****************************/
-    
-    /*
-    * Provides algorithm for deciding when to change difficulty
-    */
     var timesthisFuncCalled: Int = 0
     var repeat: Int = 10
-    func getNewGroupAmount() -> Int {
-        if totalLinesDropped == 0 { return 1 }
-        
+    func updateGroupAmount() {
         if timesthisFuncCalled == repeat {
             timesthisFuncCalled = 0
             switch diffLevel {
             case V_EASY: repeat = 10
+                groupAmtMin = 2
+                groupAmtMax = 3
                 break
             case EASY: repeat = 10
+                groupAmtMin = (groupAmtMin*2 - 1)
+                groupAmtMax = (groupAmtMin*2 - 1)
                 break
             case MED: repeat = 10
+                groupAmtMin = (groupAmtMin*2 - 1)
+                groupAmtMax = (groupAmtMin*2 - 1)
                 break
             case HARD: repeat = 7
+                groupAmtMin = (groupAmtMin*2 - 1)
+                groupAmtMax = (groupAmtMin*2 - 1)
                 break
             case V_HARD: repeat = 5
+                groupAmtMin = (groupAmtMin*2 - 1)
+                groupAmtMax = (groupAmtMin*2 - 1)
                 break
             default: repeat = 1
+                groupAmtMin = (groupAmtMin*2 - 1)
+                groupAmtMax = (groupAmtMin*2 - 1)
             }
-            changeDiff = true
         }
         timesthisFuncCalled++
-        
-        return randomInt(groupAmtMin, groupAmtMax)
         
     }
     
@@ -451,11 +465,18 @@ class ClassicGameScene: SKScene {
     ***********************************************************************************************************/
     func dropNewGroup() {
         //if true, drop a new group of lines
-        let linesToDrop = getNewGroupAmount()
+        var linesToDrop: Int
+        if (totalLinesDropped == 0) {
+            linesToDrop = 1
+        }
+        else {
+            updateGroupAmount()
+            linesToDrop = randomInt(groupAmtMin, groupAmtMax)
+        }
         let waitBeforeGroup = totalLinesDropped == 0 ?
             0.0 : NSTimeInterval(CGFloat.random(min: groupWaitTimeMin, max: groupWaitTimeMax))
         
-        let groupSequence = SKAction.sequence([SKAction.runBlock({self.dropRandomLine()}), SKAction.runBlock({self.changeJoeyCount()}), SKAction.waitForDuration(timeBetweenLines)])
+        let groupSequence = SKAction.sequence([SKAction.runBlock({self.dropRandomLine()}), SKAction.waitForDuration(timeBetweenLines)])
         let groupAction = SKAction.repeatAction(groupSequence, count: linesToDrop)
         let finalAction = SKAction.sequence([SKAction.waitForDuration(waitBeforeGroup), groupAction])
         
@@ -488,6 +509,9 @@ class ClassicGameScene: SKScene {
         let groupScore = SKAction.group([SKAction.runBlock({self.joeyCountLabel.runAction(scoreAction)}),
             SKAction.runBlock({self.joeyCountLabelS.runAction(scoreAction)})])
         runAction(groupScore)
+        
+        if (joeyCount == 0) { gameState = .GameOver }
+        
     }
     
     /*********************** Drop Group Helper Functions ******************************/
@@ -580,6 +604,7 @@ class ClassicGameScene: SKScene {
                     [scaleUp, scaleDown, scaleUp, scaleDown])
                 let group = SKAction.group([fullScale, fullWiggle])
                 droplet.runAction(SKAction.repeatActionForever(group))
+                changeJoeyCount()
             }
             if(type == BOOMERANG) {
                 let halfSpin = SKAction.rotateByAngle(π, duration: 0.5)
