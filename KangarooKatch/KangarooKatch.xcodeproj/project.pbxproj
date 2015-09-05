@@ -27,7 +27,6 @@
 		ADEF4D001B57155E00996C69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4CFF1B57155E00996C69 /* Images.xcassets */; };
 		ADEF4D031B57155E00996C69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D011B57155E00996C69 /* LaunchScreen.xib */; };
 		ADEF4D0F1B57155F00996C69 /* KangarooKatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADEF4D0E1B57155F00996C69 /* KangarooKatchTests.swift */; };
-		ADEF4D2A1B57165000996C69 /* KKsprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D1A1B57165000996C69 /* KKsprites.atlas */; };
 		ADEF4D2D1B57165000996C69 /* Icon29.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D1F1B57165000996C69 /* Icon29.png */; };
 		ADEF4D2E1B57165000996C69 /* Icon29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D201B57165000996C69 /* Icon29@2x.png */; };
 		ADEF4D2F1B57165000996C69 /* Icon29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D211B57165000996C69 /* Icon29@3x.png */; };
@@ -39,6 +38,7 @@
 		ADEF4D351B57165000996C69 /* Icon60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D271B57165000996C69 /* Icon60@3x.png */; };
 		ADEF4D361B57165000996C69 /* Icon76.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D281B57165000996C69 /* Icon76.png */; };
 		ADEF4D371B57165000996C69 /* Icon76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADEF4D291B57165000996C69 /* Icon76@2x.png */; };
+		ADF6CC221B9A6EDF00D1CCF1 /* KKsprites.atlas in Resources */ = {isa = PBXBuildFile; fileRef = ADF6CC211B9A6EDF00D1CCF1 /* KKsprites.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +76,6 @@
 		ADEF4D081B57155F00996C69 /* KangarooKatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KangarooKatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADEF4D0D1B57155F00996C69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADEF4D0E1B57155F00996C69 /* KangarooKatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KangarooKatchTests.swift; sourceTree = "<group>"; };
-		ADEF4D1A1B57165000996C69 /* KKsprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = KKsprites.atlas; sourceTree = "<group>"; };
 		ADEF4D1F1B57165000996C69 /* Icon29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon29.png; sourceTree = "<group>"; };
 		ADEF4D201B57165000996C69 /* Icon29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon29@2x.png"; sourceTree = "<group>"; };
 		ADEF4D211B57165000996C69 /* Icon29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon29@3x.png"; sourceTree = "<group>"; };
@@ -88,6 +87,7 @@
 		ADEF4D271B57165000996C69 /* Icon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon60@3x.png"; sourceTree = "<group>"; };
 		ADEF4D281B57165000996C69 /* Icon76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon76.png; sourceTree = "<group>"; };
 		ADEF4D291B57165000996C69 /* Icon76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon76@2x.png"; sourceTree = "<group>"; };
+		ADF6CC211B9A6EDF00D1CCF1 /* KKsprites.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = KKsprites.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,9 +177,9 @@
 			children = (
 				AD917D861B5E019E00B4E919 /* Classes */,
 				ADEF4CFC1B57155E00996C69 /* Main.storyboard */,
+				ADF6CC211B9A6EDF00D1CCF1 /* KKsprites.atlas */,
 				ADEF4CFF1B57155E00996C69 /* Images.xcassets */,
 				ADEF4D011B57155E00996C69 /* LaunchScreen.xib */,
-				ADEF4D1A1B57165000996C69 /* KKsprites.atlas */,
 				AD5A6BE21B7D96E300BEFB5E /* KKImages */,
 				ADEF4D1E1B57165000996C69 /* KKIcons */,
 				AD917D831B5E018600B4E919 /* Supporting Files */,
@@ -307,7 +307,6 @@
 				ADEF4D001B57155E00996C69 /* Images.xcassets in Resources */,
 				ADEF4D371B57165000996C69 /* Icon76@2x.png in Resources */,
 				ADEF4D361B57165000996C69 /* Icon76.png in Resources */,
-				ADEF4D2A1B57165000996C69 /* KKsprites.atlas in Resources */,
 				ADEF4D311B57165000996C69 /* Icon40@2x.png in Resources */,
 				AD5A6BED1B7D96E300BEFB5E /* LoadingScreen.png in Resources */,
 				ADEF4D2D1B57165000996C69 /* Icon29.png in Resources */,
@@ -322,6 +321,7 @@
 				AD917D951B5E01CD00B4E919 /* soupofjustice.ttf in Resources */,
 				ADEF4D2F1B57165000996C69 /* Icon29@3x.png in Resources */,
 				ADEF4D301B57165000996C69 /* Icon40.png in Resources */,
+				ADF6CC221B9A6EDF00D1CCF1 /* KKsprites.atlas in Resources */,
 				AD5A6BEB1B7D96E300BEFB5E /* ButtonImage.png in Resources */,
 				ADEF4D351B57165000996C69 /* Icon60@3x.png in Resources */,
 				ADEF4CFE1B57155E00996C69 /* Main.storyboard in Resources */,

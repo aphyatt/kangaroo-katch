@@ -278,6 +278,8 @@ class GameScene: SKScene {
             updateKangaroo()
             
             break
+        case .Paused:
+            break
         case .GameOver:
             endGame()
             break

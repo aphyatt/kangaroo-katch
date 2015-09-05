@@ -33,6 +33,8 @@ class ClassicGameScene: SKScene {
     var leftColX: CGFloat
     var midColX: CGFloat
     var rightColX: CGFloat
+    let pauseX: CGFloat = 585
+    let pauseY: CGFloat
     
     //Variables affecting speed / frequency of droplet lines
     var timeBetweenLines: NSTimeInterval = 0.5
@@ -88,7 +90,7 @@ class ClassicGameScene: SKScene {
     /************************************ Init/Update Functions ***************************************/
     
     override func didMoveToView(view: SKView) {
-        //debugDrawPlayableArea()
+        debugDrawPlayableArea()
     }
     
     init(size: CGSize, difficulty: Int, joeys: Int, controls: Control) {
@@ -120,7 +122,9 @@ class ClassicGameScene: SKScene {
         twoThirdX = playableMargin + (playableWidth*(2/3))
         
         scoreLabelX = oneThirdX - 160
-        joeyCountX = size.width/2 + 20
+        joeyCountX = size.width/2
+        
+        pauseY = size.height - 80
         
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
@@ -209,6 +213,12 @@ class ClassicGameScene: SKScene {
         kangaroo.setScale(0.7)
         addChild(kangaroo)
         
+        let pauseButton = SKSpriteNode(imageNamed: "button_black_pause")
+        pauseButton.position = CGPoint(x: size.width/2, y: size.height/2)
+        pauseButton.setScale(1.5)
+        pauseButton.zPosition = 10
+        addChild(pauseButton)
+        
         setDifficulty(diffLevel)
     }
     
@@ -216,7 +226,7 @@ class ClassicGameScene: SKScene {
         var HUDheight: CGFloat = 120
         let HUDrect = CGRect(x: 0, y: size.height - HUDheight, width: size.width, height: HUDheight)
         var HUDshape = drawRectangle(HUDrect, SKColor.blackColor(), 1.0)
-        HUDshape.fillColor = SKColor.blackColor()
+        HUDshape.fillColor = SKColor.whiteColor()
         HUDshape.zPosition = 2
         addChild(HUDshape)
         
@@ -226,24 +236,10 @@ class ClassicGameScene: SKScene {
         scoreSize = 57
         scoreY = scoreLabelY
         
-        let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(score)",
-            fontSize: scoreSize,
-            horAlignMode: .Left, vertAlignMode: .Center,
-            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
-            name: "scoreLabel",
-            positon: CGPoint(x: scoreLabelX, y: scoreY),
-            shadowZPos: 4, shadowOffset: 4)
-        scoreLabel = scoreLabelA[0]
-        scoreLabelS = scoreLabelA[1]
-        scoreLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
-        scoreLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
-        addChild(scoreLabel)
-        addChild(scoreLabelS)
-        
         let countLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Joeys: \(joeyCount)",
             fontSize: scoreSize,
-            horAlignMode: .Left, vertAlignMode: .Center,
-            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
+            horAlignMode: horAlignModeDefault, vertAlignMode: .Center,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.grayColor(),
             name: "joeyLabel",
             positon: CGPoint(x: joeyCountX, y: scoreY),
             shadowZPos: 4, shadowOffset: 4)
@@ -270,11 +266,12 @@ class ClassicGameScene: SKScene {
             updateKangaroo()
             
             break
+        case .Paused:
+            break
         case .GameOver:
             endGame()
             break
         }
-        
     }
     
     var endGameCalls: Int = 0
@@ -839,25 +836,6 @@ class ClassicGameScene: SKScene {
         joey.runAction(SKAction.removeFromParent())
         
         score++
-        scoreLabel.text = "Score: \(score)"
-        scoreLabelS.text = "Score: \(score)"
-        
-        var adjustX: CGFloat = 0
-        if score >= 10 { adjustX = 10 }
-        if score >= 100 { adjustX = 20 }
-        
-        let grow = SKAction.scaleBy(1.05, duration: 0.15)
-        let adjust = SKAction.runBlock({
-            self.scoreLabel.position.x = self.scoreLabelX - adjustX
-            self.scoreLabelS.position.x = self.scoreLabelX + 2 - adjustX
-        })
-        let shrink = grow.reversedAction()
-        let scoreAction = SKAction.sequence([grow, adjust, shrink])
-        
-        let groupScore = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
-            SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
-        runAction(groupScore)
-        
     }
     
     func kangarooMissedJoey(joey: SKSpriteNode) {
@@ -934,6 +912,10 @@ class ClassicGameScene: SKScene {
         let test = getRoundedRectShape(rect: testRect, cornerRadius: 16, color: SKColor.blackColor(), lineWidth: 5)
         test.zPosition = 10
         addChild(test)*/
+        
+        let pauseRect = drawRectangle(CGRect(x: pauseX, y: pauseY, width: 60, height: 60), SKColor.blackColor(), 6.0)
+        pauseRect.zPosition = 3
+        addChild(pauseRect)
         
         
     }

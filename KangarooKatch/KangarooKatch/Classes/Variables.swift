@@ -17,6 +17,7 @@ enum Control {
 enum GameState {
     case GameRunning
     case GameOver
+    case Paused
 }
 
 var gameControls: Control = .Thumb
