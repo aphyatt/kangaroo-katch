@@ -20,6 +20,7 @@ class ClassicGameScene: SKScene {
     let rightRect: CGRect
     let catchZoneRect: CGRect
     let fadeZoneRect: CGRect
+    let pauseRect: CGRect
     let oneThirdX: CGFloat
     let twoThirdX: CGFloat
     let playableMargin: CGFloat
@@ -48,6 +49,10 @@ class ClassicGameScene: SKScene {
     var groupAmtMax: Int = 3
     var kangSpeed: NSTimeInterval
     
+    var dropLines: Bool = false
+    var unpauseGame: Bool = false
+    var mainMenuArray: [SKNode]
+    
     //Variables dealing with touches (UI)
     var leftTouch: Bool = false
     var rightTouch: Bool = false
@@ -62,8 +67,6 @@ class ClassicGameScene: SKScene {
     let scoreLabelX: CGFloat
     let joeyCountX: CGFloat
     let scoreLabelY: CGFloat = 959
-    var scoreLabel : SKLabelNode!
-    var scoreLabelS : SKLabelNode!
     var joeyCountLabel : SKLabelNode!
     var joeyCountLabelS : SKLabelNode!
     
@@ -118,13 +121,14 @@ class ClassicGameScene: SKScene {
         fadeZoneRect = CGRect(x: playableMargin, y: dropletFadeBoundaryY - 5,
             width: playableWidth,
             height: 10)
+        pauseY = size.height - 80
+        pauseRect = CGRect(x: pauseX, y: pauseY, width: 60, height: 60)
+        
         oneThirdX = playableMargin + (playableWidth/3)
         twoThirdX = playableMargin + (playableWidth*(2/3))
         
         scoreLabelX = oneThirdX - 160
         joeyCountX = size.width/2
-        
-        pauseY = size.height - 80
         
         leftColX = (size.width/2) - (dropletRect.width/3.5)
         midColX = size.width/2
@@ -140,18 +144,71 @@ class ClassicGameScene: SKScene {
         }
         
         diffLevel = difficulty
-        
         joeyCount = joeys
+        mainMenuArray = []
         
         super.init(size: size)
         
         setupScene()
         setupHUD()
+        //run countdown, set stopDropping after action
+        dropLines = true
         
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupScene() {
+        backgroundColor = SKColor.whiteColor()
+        let background = SKSpriteNode(imageNamed: "Background")
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.zPosition = -1
+        addChild(background)
+        
+        kangaroo.position = CGPoint(x: size.width/2, y: dropletCatchBoundaryY)
+        kangaroo.zPosition = 1
+        kangaroo.setScale(0.7)
+        addChild(kangaroo)
+        
+        let pauseButton = SKSpriteNode(imageNamed: "PauseButton")
+        pauseButton.position = CGPoint(x: pauseX+30, y: pauseY+30)
+        pauseButton.setScale(1.5)
+        pauseButton.zPosition = 10
+        pauseButton.setScale(0.25)
+        addChild(pauseButton)
+        
+        setDifficulty(diffLevel)
+    }
+    
+    func setupHUD() {
+        var HUDheight: CGFloat = 120
+        let HUDrect = CGRect(x: 0, y: size.height - HUDheight, width: size.width, height: HUDheight)
+        var HUDshape = drawRectangle(HUDrect, SKColor.blackColor(), 1.0)
+        HUDshape.fillColor = SKColor.whiteColor()
+        HUDshape.zPosition = 2
+        addChild(HUDshape)
+        
+        var scoreY: CGFloat = 0
+        var scoreSize: CGFloat = 0
+        
+        scoreSize = 57
+        scoreY = scoreLabelY
+        
+        let countLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Joeys: \(joeyCount)",
+            fontSize: scoreSize,
+            horAlignMode: horAlignModeDefault, vertAlignMode: .Center,
+            labelColor: SKColor.blackColor(), shadowColor: SKColor.grayColor(),
+            name: "joeyLabel",
+            positon: CGPoint(x: joeyCountX, y: scoreY),
+            shadowZPos: 4, shadowOffset: 4)
+        joeyCountLabel = countLabelA[0]
+        joeyCountLabelS = countLabelA[1]
+        joeyCountLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        joeyCountLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        addChild(joeyCountLabel)
+        addChild(joeyCountLabelS)
     }
     
     func setDifficulty(diff: Int) {
@@ -201,56 +258,6 @@ class ClassicGameScene: SKScene {
         }
     }
     
-    func setupScene() {
-        backgroundColor = SKColor.whiteColor()
-        let background = SKSpriteNode(imageNamed: "Background")
-        background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.zPosition = -1
-        addChild(background)
-        
-        kangaroo.position = CGPoint(x: size.width/2, y: dropletCatchBoundaryY)
-        kangaroo.zPosition = 1
-        kangaroo.setScale(0.7)
-        addChild(kangaroo)
-        
-        let pauseButton = SKSpriteNode(imageNamed: "button_black_pause")
-        pauseButton.position = CGPoint(x: size.width/2, y: size.height/2)
-        pauseButton.setScale(1.5)
-        pauseButton.zPosition = 10
-        addChild(pauseButton)
-        
-        setDifficulty(diffLevel)
-    }
-    
-    func setupHUD() {
-        var HUDheight: CGFloat = 120
-        let HUDrect = CGRect(x: 0, y: size.height - HUDheight, width: size.width, height: HUDheight)
-        var HUDshape = drawRectangle(HUDrect, SKColor.blackColor(), 1.0)
-        HUDshape.fillColor = SKColor.whiteColor()
-        HUDshape.zPosition = 2
-        addChild(HUDshape)
-        
-        var scoreY: CGFloat = 0
-        var scoreSize: CGFloat = 0
-        
-        scoreSize = 57
-        scoreY = scoreLabelY
-        
-        let countLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Joeys: \(joeyCount)",
-            fontSize: scoreSize,
-            horAlignMode: horAlignModeDefault, vertAlignMode: .Center,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.grayColor(),
-            name: "joeyLabel",
-            positon: CGPoint(x: joeyCountX, y: scoreY),
-            shadowZPos: 4, shadowOffset: 4)
-        joeyCountLabel = countLabelA[0]
-        joeyCountLabelS = countLabelA[1]
-        joeyCountLabel.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
-        joeyCountLabelS.runAction(SKAction.scaleYTo(1.3, duration: 0.0))
-        addChild(joeyCountLabel)
-        addChild(joeyCountLabelS)
-    }
-    
     /*********************************************************************************************************
     * UPDATE
     * Function is called incredibly frequently, main game loop is here
@@ -267,6 +274,7 @@ class ClassicGameScene: SKScene {
             
             break
         case .Paused:
+            pauseGame()
             break
         case .GameOver:
             endGame()
@@ -274,20 +282,37 @@ class ClassicGameScene: SKScene {
         }
     }
     
+    var pauseGameCalls: Int = 0
+    func pauseGame() {
+        pauseGameCalls++
+        if(pauseGameCalls == 1) {
+            freezeDroplets()
+            showPauseMenu()
+        }
+        else {
+            if unpauseGame {
+                unpauseGame = false
+                pauseGameCalls = 0
+                removeChildrenInArray(mainMenuArray)
+                //countdown / wait
+                unfreezeDroplets()
+                dropLines = true
+                lineCountBeforeDrops = totalLinesDropped
+                currLinesToDrop = 0
+                gameState = .GameRunning
+            }
+        }
+    }
+    
     var endGameCalls: Int = 0
     func endGame() {
         endGameCalls++
         if(endGameCalls == 1) {
-            freezeDroplets()
-            let shade = drawRectangle(fullRect, SKColor.grayColor(), 1.0)
-            shade.fillColor = SKColor.grayColor()
-            shade.alpha = 0.4
-            shade.zPosition = 6
-            addChild(shade)
-            runGameOverAction()
-            let wait = SKAction.waitForDuration(6.5)
+            let wait1 = SKAction.waitForDuration(3)
+            let gameOver = SKAction.runBlock({self.runGameOverAction()})
+            let wait2 = SKAction.waitForDuration(7)
             let setBool = SKAction.runBlock({self.restartTapWait = true})
-            runAction(SKAction.sequence([wait,setBool]))
+            runAction(SKAction.sequence([wait1, gameOver, wait2, setBool]))
         }
         else {
             if restartTap {
@@ -352,43 +377,121 @@ class ClassicGameScene: SKScene {
         }
     }
     
-    func runGameOverAction() {
-        let gameOver = createShadowLabel(font: "Soup of Justice", text: "GAME OVER",
-            fontSize: 70,
-            horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
-            labelColor: SKColor.blackColor(), shadowColor: SKColor.whiteColor(),
-            name: "gameOver",
-            positon: CGPoint(x: size.width/2, y: 780),
-            shadowZPos: 7, shadowOffset: 2)
-        gameOver[0].alpha = 0.0
-        gameOver[1].alpha = 0.0
-        addChild(gameOver[0])
-        addChild(gameOver[1])
+    func unfreezeDroplets() {
+        enumerateChildNodesWithName("*") { node, _ in
+            if node.name == "joey" || node.name == "missedJoey" {
+                let node = node as! SKSpriteNode
+                node.zRotation = -π / 8.0
+                let leftWiggle = SKAction.rotateByAngle(π/4.0, duration: 0.25)
+                let rightWiggle = leftWiggle.reversedAction()
+                let fullWiggle = SKAction.sequence([leftWiggle, rightWiggle, leftWiggle, rightWiggle])
+                let scaleUp = SKAction.scaleBy(1.1, duration: 0.25)
+                let scaleDown = scaleUp.reversedAction()
+                let fullScale = SKAction.sequence(
+                    [scaleUp, scaleDown, scaleUp, scaleDown])
+                let group = SKAction.group([fullScale, fullWiggle])
+                node.runAction(SKAction.repeatActionForever(group))
+                node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width/2)
+            }
+            if node.name == "boomerang" || node.name == "missedBoomer" {
+                let node = node as! SKSpriteNode
+                let halfSpin = SKAction.rotateByAngle(π, duration: 0.5)
+                let fullSpin = SKAction.sequence([halfSpin, halfSpin])
+                node.runAction(SKAction.repeatActionForever(fullSpin))
+                node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width/2)
+            }
+        }
+    }
+    
+    func showPauseMenu() {
+        let shade = drawRectangle(fullRect, SKColor.grayColor(), 1.0)
+        shade.fillColor = SKColor.grayColor()
+        shade.alpha = 0.4
+        shade.zPosition = 6
+        shade.name = "shade"
+        addChild(shade)
         
-        //fade in GAME OVER
+        let mmRect = CGRect(x: oneThirdX-70, y: size.height/2-300,
+            width: size.width-(2*(oneThirdX-70)), height: 600)
+        let mainMenu = getRoundedRectShape(rect: mmRect, cornerRadius: 16, color: SKColor.whiteColor(), lineWidth: 8)
+        mainMenu.fillColor = SKColor.blackColor()
+        mainMenu.zPosition = 7
+        addChild(mainMenu)
+        
+        let paused = createShadowLabel(font: "Soup of Justice", text: "GAME PAUSED",
+            fontSize: 50,
+            horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
+            name: "gamePaused",
+            positon: CGPoint(x: size.width/2, y: 780),
+            shadowZPos: 8, shadowOffset: 2)
+        addChild(paused[0])
+        addChild(paused[1])
+        
+        let mmLabel = createShadowLabel(font: "Soup of Justice", text: "MAIN MENU",
+            fontSize: 20,
+            horAlignMode: horAlignModeDefault, vertAlignMode: .Baseline,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
+            name: "mainMenu",
+            positon: CGPoint(x: oneThirdX, y: 500),
+            shadowZPos: 8, shadowOffset: 2)
+        addChild(mmLabel[0])
+        addChild(mmLabel[1])
+        
+        mainMenuArray = [shade, mainMenu, paused[0], paused[1], mmLabel[0], mmLabel[1]]
+    }
+    
+    func runGameOverAction() {
+        freezeDroplets()
+        let shade = drawRectangle(fullRect, SKColor.grayColor(), 1.0)
+        shade.fillColor = SKColor.grayColor()
+        shade.alpha = 0.4
+        shade.zPosition = 6
+        addChild(shade)
+        
+        var scoreTmp: Int = 0
+        let scoreLabelA: [SKLabelNode] = createShadowLabel(font: "Soup of Justice", text: "Score: \(scoreTmp)",
+            fontSize: 60,
+            horAlignMode: .Left, vertAlignMode: .Center,
+            labelColor: SKColor.whiteColor(), shadowColor: SKColor.grayColor(),
+            name: "scoreLabel",
+            positon: CGPoint(x: size.width/2, y: 780),
+            shadowZPos: 7, shadowOffset: 4)
+        scoreLabelA[0].runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        scoreLabelA[1].runAction(SKAction.scaleYTo(1.3, duration: 0.0))
+        scoreLabelA[0].alpha = 0.0
+        scoreLabelA[1].alpha = 0.0
+        addChild(scoreLabelA[0])
+        addChild(scoreLabelA[1])
+        
+        //fade in score
         let wait = SKAction.waitForDuration(0.5)
         let fadeIn = SKAction.fadeAlphaTo(1.0, duration: 2.0)
-        let gameOverAction = SKAction.sequence([wait, fadeIn])
-        let GOgroup = SKAction.group([SKAction.runBlock({gameOver[0].runAction(gameOverAction)}),
-            SKAction.runBlock({gameOver[1].runAction(gameOverAction)})])
-        runAction(GOgroup)
+        let scoreAction = SKAction.sequence([wait, fadeIn])
+        let Sgroup = SKAction.group([SKAction.runBlock({scoreLabelA[0].runAction(scoreAction)}),
+            SKAction.runBlock({scoreLabelA[1].runAction(scoreAction)})])
+        runAction(Sgroup)
         
-        var scoreMoveLocX: CGFloat = 130
-        if score < 10 {
-            scoreMoveLocX += 20
+        while scoreTmp < score {
+            scoreLabelA[0].text = "Score: \(score)"
+            scoreLabelA[1].text = "Score: \(score)"
+            
+            var adjustX: CGFloat = 0
+            if scoreTmp >= 10 { adjustX = 10 }
+            if scoreTmp >= 100 { adjustX = 20 }
+            let grow = SKAction.scaleBy(1.05, duration: 0.15)
+            let adjust = SKAction.runBlock({
+                scoreLabelA[0].position.x = self.size.width/2 - adjustX
+                scoreLabelA[1].position.x = self.size.width/2 + 2 - adjustX
+            })
+            let shrink = grow.reversedAction()
+            let scoreAction = SKAction.sequence([grow, adjust, shrink])
+            
+            let groupScore = SKAction.group([SKAction.runBlock({scoreLabelA[0].runAction(scoreAction)}),
+                SKAction.runBlock({scoreLabelA[1].runAction(scoreAction)})])
+            SKAction.sequence([groupScore, SKAction.waitForDuration(0.2)])
+            scoreTmp++
         }
-        else if score < 100 {
-            scoreMoveLocX += 10
-        }
-        //have score move and grow under GAME OVER
-        let wait2 = SKAction.waitForDuration(3.0)
-        let bringToFront = SKAction.runBlock({self.scoreLabel.zPosition = 8; self.scoreLabelS.zPosition = 7})
-        let moveIntoPos = SKAction.moveByX(scoreMoveLocX, y: -240, duration: 1.0)
-        let grow = SKAction.scaleBy(1.3, duration: 1.0)
-        let scoreAction = SKAction.sequence([wait2, bringToFront, SKAction.group([moveIntoPos, grow])])
-        let scoreGroup = SKAction.group([SKAction.runBlock({self.scoreLabel.runAction(scoreAction)}),
-            SKAction.runBlock({self.scoreLabelS.runAction(scoreAction)})])
-        runAction(scoreGroup)
         
         //tap anywhere to restart
         let tapRestart = createShadowLabel(font: "Soup of Justice", text: "TAP ANYWHERE TO RESTART",
@@ -518,17 +621,20 @@ class ClassicGameScene: SKScene {
     * three simultaneous calls to spawnDroplet
     */
     func dropRandomLine() {
-        let chosenLine = pickRandomLine()
+        if(dropLines) {
+            println("drop")
+            let chosenLine = pickRandomLine()
         
-        let dropLeft = SKAction.runBlock({self.spawnDroplet(1, type: chosenLine[0])})
-        let dropMiddle = SKAction.runBlock({self.spawnDroplet(2, type: chosenLine[1])})
-        let dropRight = SKAction.runBlock({self.spawnDroplet(3, type: chosenLine[2])})
+            let dropLeft = SKAction.runBlock({self.spawnDroplet(1, type: chosenLine[0])})
+            let dropMiddle = SKAction.runBlock({self.spawnDroplet(2, type: chosenLine[1])})
+            let dropRight = SKAction.runBlock({self.spawnDroplet(3, type: chosenLine[2])})
         
-        let dropLine = SKAction.group([dropLeft, dropMiddle, dropRight])
-        runAction(dropLine)
-        //runAction(dropLineSound) whistle down
+            let dropLine = SKAction.group([dropLeft, dropMiddle, dropRight])
+            runAction(dropLine)
+            //runAction(dropLineSound) whistle down
         
-        totalLinesDropped++;
+            totalLinesDropped++
+        }
     }
     
     /*
@@ -649,50 +755,64 @@ class ClassicGameScene: SKScene {
     
     /********************** Update Kangaroo Helper Functions ****************************/
     
-    func sceneTouchedTwoThumbs(touchLocation:CGPoint) {
-        if (gameState == .GameOver) && restartTapWait {
-            restartTap = true
-        }
-        if leftRect.contains(touchLocation) {
-            leftTouch = true
-            rightTouch = false
-        }
-        if rightRect.contains(touchLocation) {
-            rightTouch = true
-            leftTouch = false
+    func sceneTouched(touchLocation:CGPoint) {
+        switch gameState {
+        case .GameOver:
+            if (restartTapWait) { restartTap = true }
+            break
+        case .GameRunning:
+            if (pauseRect.contains(touchLocation)) {
+                dropLines = false
+                gameState = .Paused
+            }
+            else {
+                switch controlSettings {
+                case .TwoThumbs:
+                    if leftRect.contains(touchLocation) {
+                        leftTouch = true
+                        rightTouch = false
+                    }
+                    if rightRect.contains(touchLocation) {
+                        rightTouch = true
+                        leftTouch = false
+                    }
+                    break
+                case .Thumb:
+                    if touchLocation.x < oneThirdX {
+                        leftTouch = true
+                        rightTouch = false
+                    }
+                    if touchLocation.x > twoThirdX {
+                        rightTouch = true
+                        leftTouch = false
+                    }
+                    break
+                }
+            }
+            break
+        case .Paused:
+            unpauseGame = true
+            break
         }
     }
     
-    func sceneUntouchedTwoThumbs(touchLocation:CGPoint) {
-        let leftEndTouch = leftRect.contains(touchLocation)
-        let rightEndTouch = rightRect.contains(touchLocation)
+    func sceneUntouched(touchLocation:CGPoint) {
+        if (controlSettings == .TwoThumbs) {
+            let leftEndTouch = leftRect.contains(touchLocation)
+            let rightEndTouch = rightRect.contains(touchLocation)
         
-        if leftEndTouch || (numFingers == 0) {
-            leftTouch = false
+            if leftEndTouch || (numFingers == 0) {
+                leftTouch = false
+            }
+            if rightEndTouch || (numFingers == 0) {
+                rightTouch = false
+            }
         }
-        if rightEndTouch || (numFingers == 0) {
-            rightTouch = false
-        }
-    }
-    
-    func sceneTouchedThumb(touchLocation:CGPoint) {
-        if (gameState == .GameOver) && restartTapWait {
-            restartTap = true
-        }
-        if touchLocation.x < oneThirdX {
-            leftTouch = true
-            rightTouch = false
-        }
-        if touchLocation.x > twoThirdX {
-            rightTouch = true
-            leftTouch = false
-        }
-    }
-    
-    func sceneUntouchedThumb(touchLocation:CGPoint) {
-        if numFingers == 0 {
-            leftTouch = false
-            rightTouch = false
+        if (controlSettings == .Thumb) {
+            if numFingers == 0 {
+                leftTouch = false
+                rightTouch = false
+            }
         }
     }
     
@@ -715,13 +835,7 @@ class ClassicGameScene: SKScene {
         let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         numFingers += touches.count
-        if(controlSettings == .TwoThumbs) {
-            sceneTouchedTwoThumbs(touchLocation)
-        }
-        if(controlSettings == .Thumb) {
-            sceneTouchedThumb(touchLocation)
-        }
-        
+        sceneTouched(touchLocation)
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -734,12 +848,8 @@ class ClassicGameScene: SKScene {
         let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         numFingers -= touches.count
-        if(controlSettings == .TwoThumbs) {
-            sceneUntouchedTwoThumbs(touchLocation)
-        }
-        if(controlSettings == .Thumb) {
-            sceneUntouchedThumb(touchLocation)
-        }
+        sceneUntouched(touchLocation)
+       
     }
     
     /*********************************************************************************************************
@@ -869,12 +979,13 @@ class ClassicGameScene: SKScene {
         let shakeRight = SKAction.moveByX(20.0, y: 0.0, duration: 0.1)
         let shakeOff = SKAction.sequence([shakeLeft, shakeRight, shakeLeft])
         kangaroo.runAction(shakeOff)
-        println("shake")
         
         boomer.removeAllActions()
         boomer.runAction(SKAction.removeFromParent())
         
-        //remove two eggs?
+        //boomer catch = -2 score
+        score -= 2
+
         
     }
     
